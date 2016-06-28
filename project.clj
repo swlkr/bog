@@ -13,7 +13,8 @@
                  [compojure "1.5.0"]
                  [environ "1.0.3"]
                  [http-kit "2.1.19"]
-                 [reagent "0.6.0-rc"]]
+                 [reagent "0.6.0-rc"]
+                 [ring/ring-json "0.3.1"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
