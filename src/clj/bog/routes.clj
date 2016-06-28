@@ -1,7 +1,7 @@
 (ns bog.routes
   (:require [clojure.java.io :as io]
             [compojure.core :refer [GET defroutes]]
-            [compojure.route :refer [resources]]))
+            [compojure.route :refer [resources not-found]]))
 
 (def client-response
   {:status 200
@@ -10,4 +10,5 @@
 
 (defroutes routes
   (GET "/" _ client-response)
-  (resources "/"))
+  (resources "/")
+  (not-found (slurp (io/resource "public/404.html"))))
