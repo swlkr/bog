@@ -17,7 +17,7 @@ deploy_staging:
     - apt-get update -qy
     - apt-get install -y rubygems
     - gem install dpl
-    - dpl --provider=heroku --app=bog-staging --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=bog-stg --api-key=$HEROKU_API_KEY
   only:
     - master
 
@@ -27,6 +27,6 @@ deploy_production:
     - apt-get update -qy
     - apt-get install -y rubygems
     - gem install dpl
-    - dpl --provider=heroku --app=bog --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=bog-prod --api-key=$HEROKU_API_KEY
   only:
     - tags
