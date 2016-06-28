@@ -14,7 +14,9 @@
                  [environ "1.0.3"]
                  [http-kit "2.1.19"]
                  [reagent "0.6.0-rc"]
-                 [ring/ring-json "0.3.1"]]
+                 [ring/ring-json "0.3.1"]
+                 [ragtime/ragtime.jdbc "0.5.3"]
+                 [org.postgresql/postgresql "9.4-1201-jdbc41"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
@@ -103,6 +105,9 @@
 
   :doo {:build "test"}
 
+  :aliases {"migrate"  ["run" "-m" "bog.db/migrate"]
+            "rollback" ["run" "-m" "bog.db/rollback"]}
+
   :profiles {:dev
              {:dependencies [[figwheel "0.5.4-4"]
                              [figwheel-sidecar "0.5.4-4"]
@@ -115,6 +120,7 @@
               :source-paths ["dev"]
               :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
 
+             :default [:base :system :user :provided :dev :local-dev]
              :uberjar
              {:source-paths ^:replace ["src/clj" "src/cljc"]
               :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
