@@ -5,11 +5,13 @@
             [environ.core :refer [env]]
             [org.httpkit.server :refer [run-server]]
             [bog.routes :refer [routes]]
-            [ring.middleware.json :refer [wrap-json-body wrap-json-response]])
+            [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
+            [bog.middleware :as middleware])
   (:gen-class))
 
 (def http-handler
   (-> routes
+      middleware/wrap-exceptions
       (wrap-defaults api-defaults)
       (wrap-json-body {:keywords? true})
       wrap-json-response
