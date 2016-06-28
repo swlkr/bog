@@ -16,7 +16,8 @@
                  [reagent "0.6.0-rc"]
                  [ring/ring-json "0.3.1"]
                  [ragtime/ragtime.jdbc "0.5.3"]
-                 [org.postgresql/postgresql "9.4-1201-jdbc41"]]
+                 [org.postgresql/postgresql "9.4-1201-jdbc41"]
+                 [yesql "0.5.2"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
