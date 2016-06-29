@@ -3,7 +3,8 @@
             [ragtime.repl :as repl]
             [environ.core :refer [env]]
             [clojure.string :refer [split]]
-            [bog.utils :refer [dissoc-nil-values]]))
+            [bog.utils :refer [dissoc-nil-values]]
+            [yesql.core :refer [defqueries]]))
 
 (defn get-database-uri [database-url]
   (if (nil? database-url)
@@ -43,3 +44,7 @@
 
 (defn rollback []
   (repl/rollback (load-config)))
+
+; database functions
+(defqueries "sql/users.sql"
+  {:connection (get-database-spec (env :database-url))})
