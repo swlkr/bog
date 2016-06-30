@@ -19,7 +19,8 @@
                  [org.postgresql/postgresql "9.4-1201-jdbc41"]
                  [yesql "0.5.2"]
                  [clojurewerkz/scrypt "1.2.0"]
-                 [clj-jwt "0.1.1"]]
+                 [clj-jwt "0.1.1"]
+                 [markdown-clj "0.9.89"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
