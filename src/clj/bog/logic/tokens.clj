@@ -11,10 +11,9 @@
 (defn generate [data secret]
    (-> data jwt (sign :HS256 secret) to-str))
 
-(defn generate! [payload]
- (let [secret (env :secret)]
-   (-> (merge payload claim)
-       (generate secret))))
+(defn generate! [payload secret]
+  (-> (merge payload claim)
+      (generate secret)))
 
 (defn verify-token [token secret]
   (-> token str->jwt (verify secret)))
@@ -24,9 +23,9 @@
     (-> token str->jwt :claims)
     nil))
 
-(defn decode! [token]
+(defn decode! [token secret]
   (when (not (nil? token))
-    (decode token (env :secret))))
+    (decode token secret)))
 
 (defn response [token]
   {:status 200

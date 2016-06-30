@@ -2,32 +2,20 @@
   (:require [clojure.java.io :as io]
             [compojure.core :refer [GET POST wrap-routes defroutes]]
             [compojure.route :refer [resources not-found]]
-            [bog.logic.users :as users]
-            [bog.logic.tokens :as tokens]
-            [bog.middleware :refer [wrap-jwt-auth]]))
+            [bog.middleware :refer [wrap-jwt-auth]]
+            [bog.controllers.users-controller :as users-controller]
+            [bog.controllers.tokens-controller :as tokens-controller]
+            [bog.controllers.status-controller :as status-controller]))
 
 ; protected api routes
 (defroutes protected-api-routes
-  (GET "/api/protected-status" request
-    {:status 200
-     :body {:message "alive"}}))
+  (GET "/api/protected-status" request (status-controller/get-status request)))
 
 ; api routes
 (defroutes api-routes
-  (GET "/api/status" request
-    {:status 200
-     :body {:message "alive"}})
-
-  (POST "/api/users" request
-    (-> (users/create! request)
-        (tokens/generate!)
-        (tokens/response)))
-
-  (POST "/api/tokens" request
-    (-> (users/login! request)
-        (tokens/generate!)
-        (tokens/response)))
-
+  (GET "/api/status" request (status-controller/get-status request))
+  (POST "/api/users" request (users-controller/create-user! request))
+  (POST "/api/tokens" request (tokens-controller/create-token! request))
   (wrap-routes protected-api-routes wrap-jwt-auth))
 
 ; client routes

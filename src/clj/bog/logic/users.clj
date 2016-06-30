@@ -1,6 +1,5 @@
 (ns bog.logic.users
   (:require [bog.utils :as utils :refer [throw+ ensure!]]
-            [environ.core :refer [env]]
             [clojurewerkz.scrypt.core :as sc]
             [bog.db :as db]))
 
@@ -51,13 +50,10 @@
 (defn format-token-params [{:keys [id]}]
   {:id id})
 
-(defn create! [request]
-  (let [secret (env :secret)]
-    (if (nil? secret)
-      (throw+ "Missing secret env variable")
-      (-> (create request secret)
-          (db/insert-user<!)
-          (format-token-params)))))
+(defn create! [request secret]
+  (-> (create request secret)
+      (db/insert-user<!)
+      (format-token-params)))
 
 (defn is-matching-password? [db-params http-params]
   (let [{:keys [password]} db-params]
@@ -90,9 +86,8 @@
        (ensure-matching-password r http-params)
        (format-token-params r))))
 
-(defn login! [request]
-  (let [secret (env :secret)]
-    (-> (:body request)
-        (login)
-        (db/get-users-by-email)
-        (login (:body request)))))
+(defn login! [request secret]
+  (-> (:body request)
+      (login)
+      (db/get-users-by-email)
+      (login (:body request))))
