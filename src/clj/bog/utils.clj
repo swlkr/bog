@@ -45,3 +45,6 @@
       (str
         "Missing parameters. Expected: "
         (clojure.string/join ", " (map #(str (name %)) ks))))))
+
+(defn seq-contains? [coll target]
+  (some #(= target %) coll))
