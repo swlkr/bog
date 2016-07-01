@@ -24,7 +24,8 @@
     nil))
 
 (defn decode! [token secret]
-  (when (not (nil? token))
+  (when (and (not (nil? token))
+             (not (nil? secret)))
     (decode token secret)))
 
 (defn response [token]

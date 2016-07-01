@@ -1,5 +1,6 @@
 (ns bog.middleware
-  (:require [bog.logic.tokens :as tokens]))
+  (:require [bog.logic.tokens :as tokens]
+            [environ.core :refer [env]]))
 
 (defn wrap-exceptions [handler]
   (fn [request]
@@ -13,7 +14,8 @@
 (defn wrap-jwt-auth [handler]
   (fn [request]
     (let [{:keys [headers]} request
-          user (tokens/decode! (get headers "authorization"))
+          secret (env :secret)
+          user (tokens/decode! (get headers "authorization") secret)
           req (assoc request :user user)]
       (if (not (nil? user))
         (handler req)
