@@ -18,8 +18,8 @@
     (if (= a 0)
       data
       (throw+ (-> nil-data
-                  (keys)
-                  (first)
+                  keys
+                  first
                   (str " was blank"))))))
 
 (defn dissoc-nil-values [data]
