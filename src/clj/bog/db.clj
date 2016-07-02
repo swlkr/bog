@@ -46,8 +46,9 @@
   (repl/rollback (load-config)))
 
 ; database functions
-(defqueries "sql/users.sql"
+(defn get-connection []
   {:connection (get-database-spec (env :database-url))})
 
-(defqueries "sql/posts.sql"
-  {:connection (get-database-spec (env :database-url))})
+(defqueries "sql/users.sql" (get-connection))
+(defqueries "sql/posts.sql" (get-connection))
+(defqueries "sql/comments.sql" (get-connection))

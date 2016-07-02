@@ -6,7 +6,8 @@
             [bog.controllers.users-controller :as users-controller]
             [bog.controllers.tokens-controller :as tokens-controller]
             [bog.controllers.status-controller :as status-controller]
-            [bog.controllers.posts-controller :as posts-controller]))
+            [bog.controllers.posts-controller :as posts-controller]
+            [bog.controllers.comments-controller :as comments-controller]))
 
 ; protected api routes
 (defroutes protected-api-routes
@@ -18,6 +19,7 @@
   (GET "/api/status" request (status-controller/get-status request))
   (POST "/api/users" request (users-controller/create-user! request))
   (POST "/api/tokens" request (tokens-controller/create-token! request))
+  (POST "/api/comments" request (comments-controller/create-comment! request))
   (wrap-routes protected-api-routes wrap-jwt-auth))
 
 ; client routes
