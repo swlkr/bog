@@ -5,11 +5,13 @@
             [bog.middleware :refer [wrap-jwt-auth]]
             [bog.controllers.users-controller :as users-controller]
             [bog.controllers.tokens-controller :as tokens-controller]
-            [bog.controllers.status-controller :as status-controller]))
+            [bog.controllers.status-controller :as status-controller]
+            [bog.controllers.posts-controller :as posts-controller]))
 
 ; protected api routes
 (defroutes protected-api-routes
-  (GET "/api/protected-status" request (status-controller/get-status request)))
+  (GET "/api/protected-status" request (status-controller/get-status request))
+  (POST "/api/posts" request (posts-controller/create-post! request)))
 
 ; api routes
 (defroutes api-routes

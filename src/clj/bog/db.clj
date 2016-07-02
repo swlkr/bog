@@ -48,3 +48,6 @@
 ; database functions
 (defqueries "sql/users.sql"
   {:connection (get-database-spec (env :database-url))})
+
+(defqueries "sql/posts.sql"
+  {:connection (get-database-spec (env :database-url))})
