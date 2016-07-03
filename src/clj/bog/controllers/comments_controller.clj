@@ -5,3 +5,8 @@
   (-> (:body request)
       comments/create!
       comments/create-response))
+
+(defn get-comments! [id]
+  (-> id
+      comments/get-by-post-id!
+      comments/get-by-post-id-response))

@@ -2,6 +2,7 @@
   (:require [clojure.java.io :as io]
             [compojure.core :refer [GET POST wrap-routes defroutes]]
             [compojure.route :refer [resources not-found]]
+            [compojure.coercions :refer [as-int]]
             [bog.middleware :refer [wrap-jwt-auth]]
             [bog.controllers.users-controller :as users-controller]
             [bog.controllers.tokens-controller :as tokens-controller]
@@ -20,6 +21,7 @@
   (POST "/api/users" request (users-controller/create-user! request))
   (POST "/api/tokens" request (tokens-controller/create-token! request))
   (POST "/api/comments" request (comments-controller/create-comment! request))
+  (GET "/api/posts/:id/comments" [id :<< as-int] (comments-controller/get-comments! id))
   (wrap-routes protected-api-routes wrap-jwt-auth))
 
 ; client routes

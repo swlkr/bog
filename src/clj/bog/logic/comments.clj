@@ -31,3 +31,21 @@
 (defn create-response [comment]
   {:status 200
    :body {:comment comment}})
+
+(defn get-by-post-id-sql-params [id]
+  {:post_id id})
+
+(defn get-by-post-id-response [db-rows]
+  (->> db-rows
+       (map #(select-keys % [:id :name :content :created_at]))
+       (assoc {} :comments)
+       (assoc {} :status 200 :body)))
+
+(defn get-by-post-id [id]
+  (-> id
+      get-by-post-id-sql-params))
+
+(defn get-by-post-id! [id]
+  (-> id
+      get-by-post-id
+      db/get-comments-by-post-id))
