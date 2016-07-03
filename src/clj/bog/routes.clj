@@ -19,6 +19,7 @@
 (defroutes api-routes
   (GET "/api/status" request (status-controller/get-status request))
   (POST "/api/users" request (users-controller/create-user! request))
+  (GET "/api/users/:id/posts" [id :<< as-int] (posts-controller/get-list! id))
   (POST "/api/tokens" request (tokens-controller/create-token! request))
   (POST "/api/comments" request (comments-controller/create-comment! request))
   (GET "/api/posts/:id/comments" [id :<< as-int] (comments-controller/get-comments! id))

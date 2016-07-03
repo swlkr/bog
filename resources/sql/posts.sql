@@ -13,3 +13,9 @@ insert into posts (
   :type,
   :sort_order
 )
+
+-- name: get-posts-by-user-id
+-- Gets a list of posts by user id
+select *
+from posts
+where user_id = :user_id

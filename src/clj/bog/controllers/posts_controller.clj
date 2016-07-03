@@ -10,3 +10,8 @@
     (->> input
          posts/create!
          posts/create-response)))
+
+(defn get-list! [id]
+  (-> id
+      posts/get-list!
+      posts/get-list-response))

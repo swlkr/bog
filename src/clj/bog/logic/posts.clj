@@ -33,3 +33,21 @@
 (defn create-response [post]
   {:status 200
    :body {:post post}})
+
+(defn get-list-sql-params [id]
+  {:user_id id})
+
+(defn get-list [id]
+  (-> id
+      get-list-sql-params))
+
+(defn get-list-response [db-rows]
+  (->> db-rows
+       (map #(select-keys % [:id :title :content :sort_order :created_at]))
+       (assoc {} :posts)
+       (assoc {} :status 200 :body)))
+
+(defn get-list! [id]
+  (-> id
+      get-list
+      db/get-posts-by-user-id))
