@@ -14,9 +14,9 @@
 (def http-handler
   (-> routes
       middleware/wrap-exceptions
+      wrap-json-response
       (wrap-defaults api-defaults)
       (wrap-json-body {:keywords? true})
-      wrap-json-response
       wrap-with-logger
       wrap-gzip))
 
