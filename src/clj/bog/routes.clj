@@ -26,13 +26,14 @@
   (wrap-routes protected-api-routes wrap-jwt-auth))
 
 ; client routes
-(def client-response
+(defn client-response []
   {:status 200
    :headers {"Content-Type" "text/html; charset=utf-8"}
    :body (io/input-stream (io/resource "public/index.html"))})
 
 (defroutes routes
   api-routes
-  (GET "/" _ client-response)
+  (GET "/" _ (client-response))
+  (GET "/login" _ (client-response))
   (resources "/")
   (not-found (slurp (io/resource "public/404.html"))))
