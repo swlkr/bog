@@ -9,8 +9,7 @@
     {:user_id (:id user)
      :title title
      :content content
-     :type (name type)
-     :sort_order sort-order}))
+     :type (name type)}))
 
 (defn encode-html [params]
   (let [{:keys [title content]} params
@@ -34,20 +33,11 @@
   {:status 200
    :body {:post post}})
 
-(defn get-list-sql-params [id]
-  {:user_id id})
-
-(defn get-list [id]
-  (-> id
-      get-list-sql-params))
+(defn get-list []
+  (db/get-posts))
 
 (defn get-list-response [db-rows]
   (->> db-rows
-       (map #(select-keys % [:id :title :content :sort_order :created_at]))
+       (map #(select-keys % [:id :title :content :created_at]))
        (assoc {} :posts)
        (assoc {} :status 200 :body)))
-
-(defn get-list! [id]
-  (-> id
-      get-list
-      db/get-posts-by-user-id))

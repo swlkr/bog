@@ -11,7 +11,6 @@
          posts/create!
          posts/create-response)))
 
-(defn get-list! [id]
-  (-> id
-      posts/get-list!
+(defn get-posts! [request]
+  (-> (posts/get-list)
       posts/get-list-response))

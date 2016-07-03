@@ -6,8 +6,7 @@
 (def PostRequest {:user user-schema/User
                   :title s/Str
                   :content s/Str
-                  :type (s/enum :post :quote :video :slideshow)
-                  :sort-order s/Int})
+                  :type (s/enum :post :quote :video :slideshow)})
 
 (def parse-request
   (coerce/coercer PostRequest coerce/json-coercion-matcher))

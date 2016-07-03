@@ -5,13 +5,11 @@
 (def valid-request {:title "a"
                     :content "b"
                     :user {:id 1}
-                    :type "post"
-                    :sort-order 0})
+                    :type "post"})
 (def expected {:title "a"
                :content "b"
                :user_id 1
-               :type "post"
-               :sort_order 0})
+               :type "post"})
 
 (deftest create-test-with-valid-req
   (is (= expected (create valid-request))))
@@ -19,8 +17,7 @@
 (def invalid-type-req {:title "a"
                        :content "b"
                        :user {:id 1}
-                       :type "a"
-                       :sort-order 0})
+                       :type "a"})
 
 (deftest create-test-with-invalid-type
   (is
@@ -39,14 +36,12 @@
 (def html-req {:title "<script>alert('title')</script>"
                :content "<script>alert('content')</script>"
                :user {:id 1}
-               :type "quote"
-               :sort-order 0})
+               :type "quote"})
 
 (def html-expected {:title "%3Cscript%3Ealert%28%27title%27%29%3C%2Fscript%3E"
                     :content "%3Cscript%3Ealert%28%27content%27%29%3C%2Fscript%3E"
                     :user_id 1
-                    :type "quote"
-                    :sort_order 0})
+                    :type "quote"})
 
 (deftest create-test-with-html-req
   (is (= html-expected (create html-req))))

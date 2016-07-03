@@ -4,18 +4,16 @@ insert into posts (
   user_id,
   title,
   content,
-  type,
-  sort_order
+  type
 ) values (
   :user_id,
   :title,
   :content,
-  :type,
-  :sort_order
+  :type
 )
 
--- name: get-posts-by-user-id
--- Gets a list of posts by user id
+-- name: get-posts
+-- Gets a list of posts from all users (there's only one so this doesn't really matter)
 select *
 from posts
-where user_id = :user_id
+order by created_at
