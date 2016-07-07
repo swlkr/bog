@@ -1,3 +1,372 @@
-h1 {
-  text-decoration: underline;
+* {
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: "proxima-nova", Helvetica, sans-serif !important;
+  padding-top: 20px;
+  background-color: #f5f8fa;
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
+  height: 100%;
+  margin: 0 auto -30px; /* the bottom margin is the negative value of the footer's height */
+}
+
+.home-template .wrapper, .tag-template .wrapper {
+  background-color: #f5f8fa;
+}
+
+footer.footer, .push {
+  height: 30px; /* .push must be the same height as .footer */
+  clear: both;
+}
+
+/*
+ * =========================
+ * Header
+ * =========================
+ */
+
+.header.jumbotron {
+  position: relative;
+  margin-top: 30px;
+  background: -webkit-image-set( url('https://scontent-lax3-1.cdninstagram.com/t51.2885-15/e35/13531913_935576759884344_1748044273_n.jpg?ig_cache_key=MTI4NzE4MjMyMTI3OTIxMjA2Mw%3D%3D.2') 1x, url('https://scontent-lax3-1.cdninstagram.com/t51.2885-15/e35/13531913_935576759884344_1748044273_n.jpg?ig_cache_key=MTI4NzE4MjMyMTI3OTIxMjA2Mw%3D%3D.2') 2x );
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  margin-bottom: 0;
+  overflow: hidden;
+  height: 250px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .header.jumbotron {
+    height: 365px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    margin-top: 50px;
+  }
+
+  .header.jumbotron img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.header.jumbotron .text {
+  color: #fff;
+  margin-top: 65px;
+  font-size: 30px;
+}
+
+.header.jumbotron .overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,.3);
+}
+
+/*
+ * =========================
+ * Main Nav
+ * =========================
+ */
+
+.navbar {
+   /*background: #ff8d45;*/
+   background: #fff;
+   border: 0;
+   color: #333;
+   box-shadow: none;
+}
+
+.navbar-toggle {
+  border: 0;
+}
+
+.navbar-toggle:hover {
+  background-color: transparent !important;
+}
+
+ .navbar-toggle .icon-bar {
+ }
+
+ .navbar .navbar-brand {
+   text-shadow: none;
+   float: inherit;
+ }
+
+ .navbar .navbar-brand a {
+   margin-left: 8px;
+ }
+
+ .navbar .navbar-brand a:first-child {
+   margin-left: 0;
+ }
+
+.mobile-nav {
+  background-color: #ff8d45 !important;
+  height: 50px;
+  color: #fff !important;
+  padding-left: 35px;
+}
+
+.mobile-nav ul {
+  margin: 0;
+}
+
+.mobile-nav li a {
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+.mobile-nav li a:hover {
+  color: #fff;
+}
+
+.mobile-nav li {
+  margin: 15px 0;
+  margin-right: 15px;
+}
+
+.mobile-nav li::after {
+  margin-left: 20px;
+  content: '/';
+}
+
+.mobile-nav li:last-child::after {
+  content: '';
+}
+
+.mobile-nav ul li:first-child {
+  border-left: none;
+}
+
+.nav.navmenu-nav {
+  margin-bottom: 0;
+}
+
+.navmenu li {
+  border-bottom: solid 1px #ddd;
+}
+
+.navmenu li:first-child {
+  border-top: solid 1px #ddd;
+}
+
+/*
+ * =========================
+ * Sidebar
+ * =========================
+ */
+
+.sidebar {
+  display: block;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(204, 204, 204, 0.5);
+}
+
+.sidebar .section {
+  margin: 0;
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+/*
+ * =========================
+ * Card
+ * =========================
+ */
+
+.card {
+  display: block;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  border-radius: 3px;
+}
+
+.card .card-block {
+  padding: 20px;
+  position: relative;
+}
+
+.card .card-block .card-title {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.card .card-block .card-title::before {
+  position: absolute;
+  display: inline-block;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #fff;
+  left: 40px;
+  top: 59px;
+  content: ''
+}
+
+.card .card-block a {
+  color: #81D8D0;
+}
+
+.card .card-block a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card .card-footer {
+  padding: 15px 20px;
+  background: #f9f9f9;
+  color: #9B9B9B;
+}
+
+
+/*
+ * =========================
+ * New Post
+ * =========================
+ */
+
+ .btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+/*
+ * =========================
+ * Post
+ * =========================
+ */
+
+ .post-template .footer {
+   background: #fff !important;
+ }
+
+ .post-template .push {
+   background: #fff !important;
+ }
+
+ .post-title {
+   font-weight: normal;
+   text-transform: uppercase;
+   letter-spacing: 3px;
+ }
+
+p > img {
+  width: 100%;
+}
+
+/*
+ * =========================
+ * Sections
+ * =========================
+ */
+
+.section.instagram img {
+  padding: 0;
+  margin-bottom: 3px;
+}
+
+.section.instagram .col-xs-6 {
+  padding: 0;
+}
+
+/*
+ * =========================
+ * Utilities
+ * =========================
+ */
+
+ .m-l-1 {
+   margin-left: 5px;
+ }
+
+ .home {
+   padding: 30px;
+ }
+
+.face {
+  width: 120px;
+  vertical-align: middle;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.bg-gray {
+  background-color: #f5f8fa;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.tiffany-light {
+  color: #81D8D0;
+}
+
+.m-t-lg {
+  display: block;
+  margin-top: 20px !important;
+}
+
+.m-b-lg {
+  display: block;
+  margin-top: 20px !important;
+}
+
+.p-t-lg {
+  padding-top: 20px;
+}
+
+a.no-link {
+  color: #fff;
+}
+
+a.no-link:hover {
+  color: #fff;
+}
+
+.min-full-height {
+  min-height: 100%;
+}
+
+.responsive-images img {
+  width: 100%;
 }
