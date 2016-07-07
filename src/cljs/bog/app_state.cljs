@@ -4,4 +4,5 @@
 (defonce app-state (r/atom {:error nil
                             :user nil
                             :token nil
+                            :posts []
                             :view :posts}))
