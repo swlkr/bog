@@ -5,7 +5,8 @@
             [bog.app-state :refer [app-state]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            [markdown.core :refer [md->html]]))
+            [markdown.core :refer [md->html]]
+            [bog.components.header :refer [header]]))
 
 (defn get-posts! []
   (go
@@ -37,7 +38,9 @@
   (get-posts!)
   (fn []
     (let [{:keys [posts]} @app-state]
-      [:div {:class "container-fluid"}
-        [:div {:class "row"}
-          [:div {:class "col-xs-12"}
-            [post-list posts]]]])))
+      [:div {:class "posts-view"}
+        [header]
+        [:div {:class "container-fluid"}
+          [:div {:class "row"}
+            [:div {:class "col-xs-12"}
+              [post-list posts]]]]])))

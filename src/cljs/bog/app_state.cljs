@@ -3,6 +3,10 @@
 
 (defonce app-state (r/atom {:error nil
                             :user nil
-                            :token nil
+                            :access-token nil
                             :posts []
+                            :login {:email ""
+                                    :password ""}
+                            :new-post {:title ""
+                                       :content ""}
                             :view :posts}))
