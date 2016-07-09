@@ -4,12 +4,11 @@
 
 (def secret "shhhhhhh")
 (def data {:id 1 :email "email"})
-(def payload (merge data claim))
 (def token "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJlbWFpbCIsImlzcyI6InNlbGYiLCJleHAiOjE0Njc0Mzc0MDcsImlhdCI6MTQ2NjgzMjYwN30.o7t4U5_wQAbBPMt5wyvBpOJZVx7PRrohkirSzli6DsU")
 (def token-length (count token))
 
 (deftest generate-test
-  (is (= token-length (count (generate payload secret)))))
+  (is (= token-length (count (generate data secret)))))
 
 (deftest verify-token-test
   (is (= true (verify-token token secret))))
