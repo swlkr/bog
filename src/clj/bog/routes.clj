@@ -4,25 +4,25 @@
             [compojure.route :refer [resources not-found]]
             [compojure.coercions :refer [as-int]]
             [bog.middleware :refer [wrap-jwt-auth]]
-            [bog.controllers.users-controller :as users-controller]
-            [bog.controllers.tokens-controller :as tokens-controller]
-            [bog.controllers.status-controller :as status-controller]
+            [bog.controllers.users-controller :refer [create-user!]]
+            [bog.controllers.tokens-controller :refer [create-token!]]
+            [bog.controllers.status-controller :refer [get-status]]
             [bog.controllers.posts-controller :refer [get-posts! create-post!]]
-            [bog.controllers.comments-controller :as comments-controller]))
+            [bog.controllers.comments-controller :refer [create-comment! get-comments!]]))
 
 ; protected api routes
 (defroutes protected-api-routes
-  (GET "/api/protected-status" request (status-controller/get-status request))
+  (GET "/api/protected-status" request (get-status request))
   (POST "/api/posts" request (create-post! request)))
 
 ; api routes
 (defroutes api-routes
-  (GET "/api/status" request (status-controller/get-status request))
-  (POST "/api/users" request (users-controller/create-user! request))
+  (GET "/api/status" request (get-status request))
+  (POST "/api/users" request (create-user! request))
   (GET "/api/posts" request (get-posts! request))
-  (POST "/api/tokens" request (tokens-controller/create-token! request))
-  (POST "/api/comments" request (comments-controller/create-comment! request))
-  (GET "/api/posts/:id/comments" [id :<< as-int] (comments-controller/get-comments! id))
+  (POST "/api/tokens" request (create-token! request))
+  (POST "/api/comments" request (create-comment! request))
+  (GET "/api/posts/:id/comments" [id :<< as-int] (get-comments! id))
   (wrap-routes protected-api-routes wrap-jwt-auth))
 
 ; client routes
