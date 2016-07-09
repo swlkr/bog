@@ -2,25 +2,13 @@
   margin: 0;
 }
 
-html, body {
+html, body, #app {
   height: 100%;
 }
 
 body {
   font-family: "proxima-nova", Helvetica, sans-serif !important;
   padding-top: 20px;
-  background-color: #f5f8fa;
-}
-
-.wrapper {
-  min-height: 100%;
-  height: auto !important; /* This line and the next line are not necessary unless you need IE6 support */
-  height: 100%;
-  margin: 0 auto -30px; /* the bottom margin is the negative value of the footer's height */
-}
-
-.home-template .wrapper, .tag-template .wrapper {
-  background-color: #f5f8fa;
 }
 
 footer.footer, .push {
@@ -87,9 +75,8 @@ footer.footer, .push {
  */
 
 .navbar {
-   /*background: #ff8d45;*/
    background: #fff;
-   border: 0;
+   border-bottom: solid 1px #eee;
    color: #333;
    box-shadow: none;
 }
@@ -240,6 +227,19 @@ footer.footer, .push {
   color: #9B9B9B;
 }
 
+/*
+ * =========================
+ * Forms
+ * =========================
+ */
+
+ .form-control:focus {
+   box-shadow: none;
+ }
+
+ .btn:focus {
+   outline: none;
+ }
 
 /*
  * =========================
@@ -247,7 +247,7 @@ footer.footer, .push {
  * =========================
  */
 
- .btn-file {
+.btn-file {
     position: relative;
     overflow: hidden;
 }
@@ -266,6 +266,17 @@ footer.footer, .push {
     cursor: inherit;
     display: block;
 }
+
+/*
+ * =========================
+ * Posts
+ * =========================
+ */
+
+.posts-view {
+  background-color: #f5f8fa;
+}
+
 
 /*
  * =========================
@@ -308,9 +319,27 @@ p > img {
 
 /*
  * =========================
+ * Logo
+ * =========================
+ */
+
+.logo-container {
+  margin-top: 75px;
+}
+
+.logo-container .logo {
+  color: #4caf50;
+}
+
+/*
+ * =========================
  * Utilities
  * =========================
  */
+
+ .max-height {
+   height: 100%;
+ }
 
  .m-l-1 {
    margin-left: 5px;
@@ -341,17 +370,35 @@ p > img {
   color: #81D8D0;
 }
 
-.m-t-lg {
-  display: block;
+.m-t-1 {
+  margin-top: 7px !important;
+}
+
+.m-t-2 {
+  margin-top: 15px !important;
+}
+
+.m-t-3 {
   margin-top: 20px !important;
 }
 
-.m-b-lg {
-  display: block;
+.m-b-1 {
+  margin-bottom: 7px !important;
+}
+
+.m-b-2 {
+  margin-bottom: 15px !important;
+}
+
+.m-b-3 {
   margin-top: 20px !important;
 }
 
-.p-t-lg {
+.m-r-1 {
+  margin-right: 7px !important;
+}
+
+.p-t-3 {
   padding-top: 20px;
 }
 
