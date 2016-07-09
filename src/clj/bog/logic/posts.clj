@@ -1,7 +1,7 @@
 (ns bog.logic.posts
   (:require [ring.util.codec :as c]
             [bog.db :as db]
-            [bog.schemas.post-schema :as post-schema]
+            [bog.schemas :refer [PostRequest parse-post-request]]
             [schema.core :as s]))
 
 (defn build-sql-params [params]
@@ -19,8 +19,8 @@
 
 (defn create [m]
     (->> m
-         post-schema/parse-request
-         (s/validate post-schema/PostRequest)
+         parse-post-request
+         (s/validate PostRequest)
          encode-html
          build-sql-params))
 

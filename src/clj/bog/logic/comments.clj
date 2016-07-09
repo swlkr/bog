@@ -1,7 +1,7 @@
 (ns bog.logic.comments
   (:require [ring.util.codec :as c]
             [bog.db :as db]
-            [bog.schemas.comment-schema :refer [CommentRequest parse-request]]
+            [bog.schemas :refer [CommentRequest parse-comment-request]]
             [schema.core :as s]))
 
 (defn build-sql-params [params]
@@ -18,7 +18,7 @@
 
 (defn create [m]
     (->> m
-         parse-request
+         parse-comment-request
          (s/validate CommentRequest)
          encode-html
          build-sql-params))

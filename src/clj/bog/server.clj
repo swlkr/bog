@@ -7,8 +7,8 @@
             [bog.routes :refer [routes]]
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
             [bog.middleware :as middleware]
-            [schema.core :as schema]
-            [bog.schemas.env-schema :refer [RequiredEnvVariables]])
+            [schema.core :as s]
+            [bog.schemas :refer [RequiredEnvVariables]])
   (:gen-class))
 
 (def http-handler
@@ -23,5 +23,5 @@
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 10555))
         vars (select-keys env [:database-url :secret])]
-    (schema/validate RequiredEnvVariables vars)
+    (s/validate RequiredEnvVariables vars)
     (run-server http-handler {:port port :join? false})))
