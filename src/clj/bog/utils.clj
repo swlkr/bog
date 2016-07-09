@@ -31,6 +31,10 @@
     arg
     (throw+ err)))
 
+(defn ring-response [body]
+  {:status 200
+   :body body})
+
 (defn key-is-nil? [k]
   (fn [m]
     (nil? (k m))))

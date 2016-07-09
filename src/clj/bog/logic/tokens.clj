@@ -3,17 +3,15 @@
             [clj-time.core :refer [now plus days]]
             [environ.core :refer [env]]))
 
-(def claim
-  {:iss "self"
-   :exp (plus (now) (days 7))
-   :iat (now)})
-
-(defn generate [data secret]
-   (-> data jwt (sign :HS256 secret) to-str))
-
-(defn generate! [payload secret]
-  (-> (merge payload claim)
-      (generate secret)))
+(defn generate [payload secret]
+  (let [claim {:iss "self"
+               :exp (plus (now) (days 1))
+               :iat (now)}]
+    (-> payload
+        (merge claim)
+        (jwt)
+        (sign :HS256 secret)
+        (to-str))))
 
 (defn verify-token [token secret]
   (-> token str->jwt (verify secret)))
@@ -24,10 +22,7 @@
     nil))
 
 (defn decode! [token secret]
-  (when (and (not (nil? token))
-             (not (nil? secret)))
-    (decode token secret)))
-
-(defn response [token]
-  {:status 200
-   :body {:token token}})
+  (when (and
+          (every? (comp not nil?) [token secret])
+          (not (nil? (verify-token token secret))))
+    (-> token str->jwt :claims)))

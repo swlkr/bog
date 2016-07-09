@@ -1,7 +1,11 @@
 (ns bog.logic.users
   (:require [bog.utils :as utils :refer [throw+ ensure!]]
             [clojurewerkz.scrypt.core :as sc]
-            [bog.db :as db]))
+            [bog.db :as db]
+            [bog.schemas :refer [SignUpRequest LoginRequest]]
+            [schema.core :as s]))
+
+;;; Signing up
 
 (defn matches-confirm-password? [{:keys [password password-confirm]}]
   (and
@@ -39,21 +43,16 @@
   (let [{:keys [email encrypted-password]} params]
     {:email email :password encrypted-password}))
 
-(defn create [request secret]
-  (-> (:body request)
-      (utils/ensure-no-nil-vals) ; make sure nothing is empty
-      (ensure-valid-email) ; make sure the email is valid
-      (ensure-valid-password) ; make sure the password is valid
-      (encrypt-password)
-      (format-sql-params)))
-
-(defn format-token-params [{:keys [id]}]
-  {:id id})
-
 (defn create! [request secret]
-  (-> (create request secret)
-      (db/insert-user<!)
-      (format-token-params)))
+  (->> (:body request)
+       (s/validate SignUpRequest)
+       ensure-valid-email
+       ensure-valid-password
+       encrypt-password
+       format-sql-params
+       db/insert-user<!))
+
+;;; Logging in
 
 (defn is-matching-password? [db-params http-params]
   (let [{:keys [password]} db-params]
@@ -64,30 +63,12 @@
     db-params
     (throw+ "Incorrect password")))
 
-(defn login-sql-params [{:keys [email password]}]
-  {:email email :password password})
-
-(defn more-than-one? [arr]
-  (and
-    (not (nil? arr))
-    (> (count arr) 0)))
-
-(defn login
-  ([http-params]
-   (-> http-params
-       (utils/ensure-no-nil-vals)
-       (utils/ensure-has-keys [:email :password])
-       (login-sql-params)))
-
-  ([db-results http-params]
-   (as-> db-results r
-       (ensure! more-than-one? r "That email doesn't exist. Would you like to sign up instead?")
-       (first r)
-       (ensure-matching-password r http-params)
-       (format-token-params r))))
-
 (defn login! [request secret]
-  (-> (:body request)
-      (login)
-      (db/get-users-by-email)
-      (login (:body request))))
+  (as-> (:body request) r
+        (s/validate LoginRequest r)
+        (db/get-users-by-email! r)
+        (first r)
+        (ensure! (comp not nil?) r "There was no user with that email would you like to sign up?")
+        (select-keys r [:id :email :password])
+        (ensure-matching-password r (:body request))
+        (select-keys r [:id])))

@@ -2,14 +2,11 @@
   (:require [bog.logic.users :as users]
             [bog.logic.tokens :as tokens]
             [environ.core :refer [env]]
-            [bog.utils :refer [throw+]]))
+            [bog.utils :refer [throw+ ring-response]]))
 
 (defn create-token! [request]
   (let [{:keys [secret database-url]} env]
-    (if (or
-          (nil? secret)
-          (nil? database-url))
-      (throw+ "Environment variables secret or database-url are missing") ; do this on startup?
-      (-> (users/login! request secret)
-          (tokens/generate! secret)
-          (tokens/response)))))
+    (-> request
+        (users/login! secret)
+        (tokens/generate secret)
+        ring-response)))
