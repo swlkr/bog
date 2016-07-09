@@ -8,7 +8,7 @@ insert into users (
   :password
 )
 
--- name: get-users-by-email!
+-- name: get-users-by-email
 -- Gets a user by email
 select *
 from users

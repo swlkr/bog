@@ -66,7 +66,7 @@
 (defn login! [request secret]
   (as-> (:body request) r
         (s/validate LoginRequest r)
-        (db/get-users-by-email! r)
+        (db/get-users-by-email r)
         (first r)
         (ensure! (comp not nil?) r "There was no user with that email would you like to sign up?")
         (select-keys r [:id :email :password])

@@ -6,7 +6,8 @@
 
 (defn create-token! [request]
   (let [{:keys [secret database-url]} env]
-    (-> request
-        (users/login! secret)
-        (tokens/generate secret)
-        ring-response)))
+    (as-> request r
+          (users/login! r secret)
+          (tokens/generate r secret)
+          (assoc {} :access-token r)
+          (ring-response r))))

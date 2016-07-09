@@ -36,5 +36,5 @@
           request {:body body}
           enc-params (encrypt-password body)
           db-results [{:id 1 :email "email" :password (:encrypted-password enc-params)}]]
-      (with-redefs [db/get-users-by-email! (fn [params] db-results)]
+      (with-redefs [db/get-users-by-email (fn [params] db-results)]
         (is (= expected (login! request secret))))))
