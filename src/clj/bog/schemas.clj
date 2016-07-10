@@ -20,10 +20,11 @@
 (def PostRequest {:user Token
                   :title s/Str
                   :content s/Str
+                  (s/optional-key :draft) s/Bool
                   :type (s/enum :post :quote :video :slideshow)})
 
 (def parse-post-request
- (coerce/coercer PostRequest coerce/json-coercion-matcher))
+ (coerce/coercer! PostRequest coerce/json-coercion-matcher))
 
 (def User {:id s/Int
            :email s/Str

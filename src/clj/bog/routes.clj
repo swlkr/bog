@@ -7,7 +7,7 @@
             [bog.controllers.users-controller :refer [create-user!]]
             [bog.controllers.tokens-controller :refer [create-token!]]
             [bog.controllers.status-controller :refer [get-status]]
-            [bog.controllers.posts-controller :refer [get-posts! create-post!]]
+            [bog.controllers.posts-controller :refer [get-posts! create-post! get-drafts!]]
             [bog.controllers.comments-controller :refer [create-comment! get-comments!]]))
 
 ; protected api routes
@@ -20,6 +20,7 @@
   (GET "/api/status" request (get-status request))
   (POST "/api/users" request (create-user! request))
   (GET "/api/posts" request (get-posts! request))
+  (GET "/api/drafts" request (get-drafts! request))
   (POST "/api/tokens" request (create-token! request))
   (POST "/api/comments" request (create-comment! request))
   (GET "/api/posts/:id/comments" [id :<< as-int] (get-comments! id))

@@ -1,7 +1,7 @@
 (ns bog.controllers.posts-controller
   (:require [bog.logic.posts :as post]
             [environ.core :refer [env]]
-            [bog.utils :refer [throw+]]
+            [bog.utils :refer [throw+ ring-response]]
             [bog.logic.posts :as posts]))
 
 (defn create-post! [request]
@@ -9,8 +9,12 @@
         input (assoc body :user user)]
     (->> input
          posts/create!
-         posts/create-response)))
+         ring-response)))
 
 (defn get-posts! [request]
   (-> (posts/get-list)
-      posts/get-list-response))
+      (ring-response)))
+
+(defn get-drafts! [request]
+  (-> (posts/get-drafts)
+      (ring-response)))

@@ -4,14 +4,10 @@
             [ring.mock.request :as mock]
             [clojure.data.json :as json]
             [environ.core :refer [env]]
-            [bog.db :as db]))
+            [bog.db :as db]
+            [bog.test-utils :refer [build-request]]))
 
 (def env-vars {:secret "shhhhh" :database-url "postgres://blah-blah-blah"})
-
-(defn build-request [& {:keys [url method body]}]
-  (-> (mock/request method url)
-      (mock/body (json/write-str body))
-      (mock/content-type "application/json")))
 
 (deftest invalid-create-user-test
   (with-redefs [db/insert-user<! (fn [params] {})
