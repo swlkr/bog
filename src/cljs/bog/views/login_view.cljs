@@ -3,15 +3,18 @@
              [bog.routes :as routes]
              [bog.app-state :refer [app-state]]
              [bog.components.input :refer [input]]
-             [bog.actions :as actions]))
+             [bog.actions :as actions]
+             [bog.utils :refer [classes]]))
 
 (defn login-view []
-  (let [error (:error @app-state)]
+  (let [error (:error @app-state)
+        alert-class (classes {"alert alert-danger" true
+                              "hidden" (nil? error)})]
     [:div {:class "container-fluid max-height"}
       [:div {:class "logo-container text-center"}
         [:i {:class "logo fa fa-5x fa-leaf"}]]
       [:form {:class "m-t-3"}
-        [:div {:class (str "alert alert-danger " (if (nil? error) "hidden" ""))}
+        [:div {:class alert-class}
           [:strong "Oh snap! "]
           error]
         [:div {:class "form-group"}
