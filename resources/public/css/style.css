@@ -27,7 +27,7 @@ footer.footer, .push {
   margin-top: 30px;
   background: -webkit-image-set( url('https://scontent-lax3-1.cdninstagram.com/t51.2885-15/e35/13531913_935576759884344_1748044273_n.jpg?ig_cache_key=MTI4NzE4MjMyMTI3OTIxMjA2Mw%3D%3D.2') 1x, url('https://scontent-lax3-1.cdninstagram.com/t51.2885-15/e35/13531913_935576759884344_1748044273_n.jpg?ig_cache_key=MTI4NzE4MjMyMTI3OTIxMjA2Mw%3D%3D.2') 2x );
   background-size: cover;
-  background-position: top;
+  background-position: center;
   background-repeat: no-repeat;
   margin-bottom: 0;
   overflow: hidden;
