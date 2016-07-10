@@ -11,7 +11,7 @@
       [:div {:class "logo-container text-center"}
         [:i {:class "logo fa fa-5x fa-leaf"}]]
       [:form {:class "m-t-3"}
-        [:div {:class (str "alert alert-danger" (if (nil? error) "hidden" ""))}
+        [:div {:class (str "alert alert-danger " (if (nil? error) "hidden" ""))}
           [:strong "Oh snap! "]
           error]
         [:div {:class "form-group"}
