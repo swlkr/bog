@@ -26,3 +26,20 @@
 (defn toggle-navbar []
   (let [{:keys [navbar-collapsed]} @app-state]
     (swap! app-state assoc :navbar-collapsed (not navbar-collapsed))))
+
+(defn save-draft []
+  (let [{:keys [access-token new-post]} @app-state
+        {:keys [title content type]} new-post]
+    (swap! app-state assoc :error "")
+    (go
+        (let [url "/api/posts"
+              {:keys [status body]} (<! (http/post url {:json-params {:title title
+                                                                      :content content
+                                                                      :type type
+                                                                      :draft true}
+                                                        :headers {"Authorization" access-token}}))]
+          (if (= 200 status)
+            (do
+              (swap! app-state update-in [:new-post] {:title "" :content "" :type "post"})
+              (swap! app-state assoc :view :posts))
+            (swap! app-state assoc :error (:message body)))))))

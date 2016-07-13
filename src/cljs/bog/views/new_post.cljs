@@ -4,7 +4,9 @@
              [bog.app-state :refer [app-state]]
              [bog.components.input :refer [input]]
              [bog.components.textarea :refer [textarea]]
-             [markdown.core :refer [md->html]]))
+             [bog.components.list-group :refer [list-group]]
+             [markdown.core :refer [md->html]]
+             [bog.actions :as actions]))
 
 (defn new-post []
   (let [title (-> @app-state :new-post :title)
@@ -15,18 +17,30 @@
           [:h1 "New Post"]
           [:form
             [:div {:class "form-group"}
+              [:label "Title"]
               [input :type "text"
                      :placeholder "Title goes here"
                      :class "form-control"
                      :path [:new-post :title]
                      :state app-state]]
             [:div {:class "form-group"}
+              [:label "Content"]
               [textarea :placeholder "Body goes here"
                          :class "form-control"
                          :rows 10
                          :path [:new-post :content]
                          :state app-state]]
-            [:button {:type "button" :class "btn btn-default m-r-1"} "Save Draft"]
+            [:div {:class "form-group"}
+              [:label "Type"]
+              [list-group {:items [{:text "Post" :value "post"}
+                                   {:text "Quote" :value "quote"}
+                                   {:text "Slideshow" :value "slideshow"}]
+                           :path [:new-post :type]
+                           :state app-state}]]
+            [:button {:type "button"
+                      :class "btn btn-default m-r-1"
+                      :on-click actions/save-draft}
+              "Save Draft"]
             [:button {:type "button" :class "btn btn-primary m-r-1"} "Publish"]
             [:button {:type "button" :class "btn btn-link"} "Add Image"]]]
         [:div {:class "col-xs-12 col-sm-6 col-md-8"}
