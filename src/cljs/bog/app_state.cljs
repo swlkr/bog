@@ -9,5 +9,6 @@
                             :login {:email ""
                                     :password ""}
                             :new-post {:title ""
-                                       :content ""}
+                                       :content ""
+                                       :type "post"}
                             :view :posts}))
