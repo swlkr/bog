@@ -21,7 +21,7 @@
 (defn navbar []
   (let [{:keys [navbar-collapsed access-token]} @app-state
         navbar-class (classes {"navbar-collapse" true
-                                  "collapse" (not navbar-collapsed)})]
+                                  "collapse" navbar-collapsed})]
     [:nav {:class "navbar navbar-default navbar-fixed-top"}
       [:div {:class "container-fluid"}
         [:div {:class "navbar-header"}
