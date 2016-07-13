@@ -22,3 +22,7 @@
               (swap! app-state update-in [:login] {:email "" :password ""})
               (storage/set-item! "access-token" (:access-token body)))
             (swap! app-state assoc :error (:message body)))))))
+
+(defn toggle-navbar []
+  (let [{:keys [navbar-collapsed]} @app-state]
+    (swap! app-state assoc :navbar-collapsed (not navbar-collapsed))))

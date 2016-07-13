@@ -5,6 +5,7 @@
                             :user nil
                             :access-token nil
                             :posts []
+                            :navbar-collapsed true
                             :login {:email ""
                                     :password ""}
                             :new-post {:title ""
