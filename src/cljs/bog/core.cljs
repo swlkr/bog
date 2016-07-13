@@ -5,7 +5,8 @@
             [bog.views.posts-view :refer [posts-view]]
             [bog.views.login-view :refer [login-view]]
             [bog.views.new-post :refer [new-post]]
-            [bog.components.navbar :refer [navbar]]))
+            [bog.components.navbar :refer [navbar]]
+            [bog.local-storage :as storage]))
 
 (enable-console-print!)
 
@@ -19,7 +20,9 @@
 
 (defn app []
   (let [{:keys [view]} @app-state
-        c (views view)]
+        c (views view)
+        access-token (storage/get-item "access-token")]
+    (swap! app-state assoc :access-token access-token)
     [:div {:class "max-height"}
       [navbar]
       [c]]))
