@@ -1,5 +1,4 @@
-(ns bog.components.textarea
-  (:require [bog.app-state :refer [app-state]]))
+(ns bog.components.textarea)
 
 (defn textarea [& {:keys [placeholder class path state rows]}]
   [:textarea {:placeholder placeholder

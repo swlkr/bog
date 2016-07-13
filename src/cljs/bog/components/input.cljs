@@ -1,5 +1,4 @@
-(ns bog.components.input
-  (:require [bog.app-state :refer [app-state]]))
+(ns bog.components.input)
 
 (defn input [& {:keys [type placeholder class path state]}]
   [:input {:type type
