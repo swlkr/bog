@@ -11,8 +11,8 @@
 (defn get-posts! []
   (go
     (let [url "/api/posts"
-          response (<! (http/get url))]
-      (swap! app-state assoc :posts (-> response :body :posts)))))
+          {:keys [status body]} (<! (http/get url))]
+      (swap! app-state assoc :posts body))))
 
 (defn post [p]
   (let [{:keys [title content created_at]} p]
