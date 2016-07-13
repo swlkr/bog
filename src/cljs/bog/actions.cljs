@@ -14,11 +14,11 @@
     (swap! app-state assoc :error "")
     (go
         (let [url "/api/tokens"
-              response (<! (http/post url {:json-params {:email email :password pw}}))]
-          (if (= 200 (:status response))
+              {:keys [status body]} (<! (http/post url {:json-params {:email email :password pw}}))]
+          (if (= 200 status)
             (do
-              (swap! app-state assoc :access-token (-> response :body :access-token))
+              (swap! app-state assoc :access-token (:access-token body))
               (swap! app-state assoc :view :new-post)
               (swap! app-state update-in [:login] {:email "" :password ""})
-              (storage/set-item! "access-token" (-> response :body :access-token)))
-            (swap! app-state assoc :error (-> response :body :message)))))))
+              (storage/set-item! "access-token" (:access-token body)))
+            (swap! app-state assoc :error (:message body)))))))
