@@ -37,5 +37,6 @@
   (GET "/" _ (client-response))
   (GET "/login" _ (client-response))
   (GET "/new-post" _ (client-response))
+  (GET "/drafts" _ (client-response))
   (resources "/")
   (not-found (slurp (io/resource "public/404.html"))))

@@ -5,6 +5,7 @@
             [bog.views.posts-view :refer [posts-view]]
             [bog.views.login-view :refer [login-view]]
             [bog.views.new-post :refer [new-post]]
+            [bog.views.drafts-view :refer [drafts-view]]
             [bog.components.navbar :refer [navbar]]
             [bog.local-storage :as storage]))
 
@@ -16,6 +17,7 @@
 (defmethod views :posts [] posts-view)
 (defmethod views :login [] login-view)
 (defmethod views :new-post [] new-post)
+(defmethod views :drafts [] drafts-view)
 (defmethod views :default [] (:h1 "Not found"))
 
 (defn app []
