@@ -13,14 +13,14 @@
 ; protected api routes
 (defroutes protected-api-routes
   (GET "/api/protected-status" request (get-status request))
-  (POST "/api/posts" request (create-post! request)))
+  (POST "/api/posts" request (create-post! request))
+  (GET "/api/drafts" request (get-drafts! request)))
 
 ; api routes
 (defroutes api-routes
   (GET "/api/status" request (get-status request))
   (POST "/api/users" request (create-user! request))
   (GET "/api/posts" request (get-posts! request))
-  (GET "/api/drafts" request (get-drafts! request))
   (POST "/api/tokens" request (create-token! request))
   (POST "/api/comments" request (create-comment! request))
   (GET "/api/posts/:id/comments" [id :<< as-int] (get-comments! id))
