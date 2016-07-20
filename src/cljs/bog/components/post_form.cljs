@@ -1,45 +1,46 @@
-(ns bog.views.new-post
+(ns bog.components.post-form
    (:require [reagent.core :as r]
              [bog.routes :as routes]
              [bog.app-state :refer [app-state]]
              [bog.components.input :refer [input]]
              [bog.components.textarea :refer [textarea]]
              [bog.components.list-group :refer [list-group]]
-             [markdown.core :refer [md->html]]
-             [bog.actions :as actions]))
+             [markdown.core :refer [md->html]]))
 
-(defn new-post []
-  (let [title (-> @app-state :new-post :title)
-        content (-> @app-state :new-post :content md->html)]
+(defn post-form [props]
+  (let [{:keys [paths page-title app-state on-save-draft-click]} props
+        title (get-in @app-state (:title paths))
+        content (get-in @app-state (:content paths))
+        type (get-in @app-state (:type paths))]
     [:div {:class "container-fluid m-t-3"}
       [:div {:class "row"}
         [:div {:class "col-xs-12 col-sm-6 col-md-4"}
-          [:h1 "New Post"]
+          [:h1 page-title]
           [:form
             [:div {:class "form-group"}
               [:label "Title"]
               [input :type "text"
                      :placeholder "Title goes here"
                      :class "form-control"
-                     :path [:new-post :title]
+                     :path (:title paths)
                      :state app-state]]
             [:div {:class "form-group"}
               [:label "Content"]
               [textarea :placeholder "Body goes here"
                          :class "form-control"
                          :rows 10
-                         :path [:new-post :content]
+                         :path (:content paths)
                          :state app-state]]
             [:div {:class "form-group"}
               [:label "Type"]
               [list-group {:items [{:text "Post" :value "post"}
                                    {:text "Quote" :value "quote"}
                                    {:text "Slideshow" :value "slideshow"}]
-                           :path [:new-post :type]
+                           :path (:type paths)
                            :state app-state}]]
             [:button {:type "button"
                       :class "btn btn-default m-r-1"
-                      :on-click actions/create-draft!}
+                      :on-click on-save-draft-click}
               "Save Draft"]
             [:button {:type "button" :class "btn btn-primary m-r-1"} "Publish"]
             [:button {:type "button" :class "btn btn-link"} "Add Image"]]]

@@ -18,10 +18,16 @@
                   :icon "asterisk"
                   :text "New Post"}]))
 
+(defn drafts-link [access-token]
+  (when (not (nil? access-token))
+    [navbar-link {:href (url-for :drafts)
+                  :icon "list"
+                  :text "Drafts"}]))
+
 (defn navbar []
   (let [{:keys [navbar-collapsed access-token]} @app-state
         navbar-class (classes {"navbar-collapse" true
-                                  "collapse" navbar-collapsed})]
+                               "collapse" navbar-collapsed})]
     [:nav {:class "navbar navbar-default navbar-fixed-top"}
       [:div {:class "container-fluid"}
         [:div {:class "navbar-header"}
@@ -36,6 +42,7 @@
                           :icon "home"
                           :text "Home"}]
             [new-post-link access-token]
+            [drafts-link access-token]
             [navbar-link {:href "https://instagram.com/adventure_walker"
                           :icon "instagram"
                           :text "Instagram"}]

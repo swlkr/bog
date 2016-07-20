@@ -8,6 +8,7 @@
 (def routes ["/" {"" :posts
                   "login" :login
                   "new-post" :new-post
+                  "edit-draft" :edit-draft
                   "drafts" :drafts}])
 
 (def url-for (partial bidi/path-for routes))

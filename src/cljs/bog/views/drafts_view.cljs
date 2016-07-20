@@ -11,13 +11,15 @@
 (defn get-drafts! []
   (go
     (let [url "/api/drafts"
-          {:keys [status body]} (<! (http/get url))]
+          {:keys [access-token]} @app-state
+          {:keys [status body]} (<! (http/get url {:headers {"Authorization" access-token}}))]
       (swap! app-state assoc :drafts body))))
 
 (defn edit-draft-clicked [e d]
   (do
     (.preventDefault e)
-    (swap! app-state assoc :edit-draft d :view :edit-draft)))
+    (swap! app-state assoc :edit-draft d)
+    (routes/set-page! {:handler :edit-draft})))
 
 (defn draft [d]
   (let [{:keys [title content created_at]} d]
