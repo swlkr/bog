@@ -1,7 +1,9 @@
 (ns bog.logic.posts
-  (:require [ring.util.codec :as c]
-            [bog.db :as db]
-            [bog.schemas :refer [PostRequest parse-post-request]]
+  (:require [bog.db :as db]
+            [bog.schemas :refer [PostRequest
+                                 parse-post-request
+                                 UpdatePostRequest
+                                 parse-update-post-request]]
             [schema.core :as s]))
 
 (defn build-sql-params [params]
@@ -12,26 +14,33 @@
      :type (name (or type ""))
      :draft draft}))
 
-(defn encode-html [params]
-  (let [{:keys [title content]} params
-        s-title (c/url-encode title)
-        s-content (c/url-encode content)]
-    (merge params {:title s-title :content s-content})))
-
-(defn create! [params]
-  (->> params
-       (parse-post-request)
-       (s/validate PostRequest)
-       (encode-html)
-       (build-sql-params)
-       (db/insert-post<!)))
-
 (defn format-date [date format-str]
   (.format (java.text.SimpleDateFormat. format-str) date))
 
 (defn format-created-at [m]
   (let [{:keys [created_at]} m]
     (assoc m :created_at (format-date created_at "MMMM dd yyyy"))))
+
+(defn create! [params]
+  (->> params
+       (parse-post-request)
+       (s/validate PostRequest)
+       (build-sql-params)
+       (db/insert-post<!)))
+
+(defn build-update-sql-params [params]
+  (let [{:keys [id]} params]
+    (-> params
+        (build-sql-params)
+        (merge {:id id}))))
+
+(defn update! [params]
+  (->> params
+       (parse-update-post-request)
+       (s/validate UpdatePostRequest)
+       (build-update-sql-params)
+       (db/update-post<!)
+       (format-created-at)))
 
 (defn get-list []
   (->> (db/get-posts)

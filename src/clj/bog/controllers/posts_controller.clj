@@ -18,3 +18,10 @@
 (defn get-drafts! [request]
   (-> (posts/get-drafts)
       (ring-response)))
+
+(defn update-post! [request id]
+  (let [{:keys [body user]} request
+        params (assoc body :user user :id id)]
+    (-> params
+        (posts/update!)
+        (ring-response))))
