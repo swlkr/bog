@@ -9,7 +9,7 @@
     {:user_id (:id user)
      :title title
      :content content
-     :type (name type)
+     :type (name (or type ""))
      :draft draft}))
 
 (defn encode-html [params]
