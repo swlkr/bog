@@ -23,8 +23,18 @@
                   (s/optional-key :draft) s/Bool
                   :type (s/enum :post :quote :video :slideshow)})
 
+(def UpdatePostRequest {:id s/Int
+                        :user Token
+                        (s/optional-key :title) s/Str
+                        (s/optional-key :content) s/Str
+                        (s/optional-key :draft) s/Bool
+                        (s/optional-key :type) (s/enum :post :quote :video :slideshow)})
+
 (def parse-post-request
  (coerce/coercer! PostRequest coerce/json-coercion-matcher))
+
+(def parse-update-post-request
+ (coerce/coercer! UpdatePostRequest coerce/json-coercion-matcher))
 
 (def User {:id s/Int
            :email s/Str
