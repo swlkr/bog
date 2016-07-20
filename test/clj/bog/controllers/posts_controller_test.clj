@@ -56,26 +56,7 @@
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
         (is
           (= expected
-            (http-handler request)))))
-
-    (testing "with valid post with html"
-      (let [request (build-request :url "/api/posts"
-                                   :method :post
-                                   :body {:title "<script>alert('title')</script>"
-                                          :content "<script>alert('title')</script>"
-                                          :type "post"
-                                          :draft false})
-            expected {:status 200
-                      :body (json/write-str {:user_id 1
-                                             :title "%3Cscript%3Ealert%28%27title%27%29%3C%2Fscript%3E"
-                                             :content "%3Cscript%3Ealert%28%27title%27%29%3C%2Fscript%3E"
-                                             :type "post"
-                                             :draft false})
-                      :headers {"Content-Type" "application/json; charset=utf-8"}}]
-        (is
-          (= expected
             (http-handler request)))))))
-
 
 (deftest create-draft-test
   (with-redefs [db/insert-post<! (fn [params] params)
