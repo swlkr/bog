@@ -14,6 +14,18 @@ insert into posts (
   :draft
 )
 
+-- name: update-post<!
+-- Updates a post
+update posts
+set
+  title = :title,
+  content = :content,
+  type = :type,
+  draft = :draft
+where
+  id = :id
+
+
 -- name: get-posts
 -- Gets a list of posts from all users
 select *
