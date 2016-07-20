@@ -5,8 +5,6 @@
             [cljs.core.async :refer [<!]]
             [bog.local-storage :as storage]))
 
-(enable-console-print!)
-
 (defn login [e]
   (let [email (-> @app-state :login :email)
         pw (-> @app-state :login :password)]
