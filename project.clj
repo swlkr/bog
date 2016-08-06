@@ -58,7 +58,7 @@
                 ;; :figwheel {:on-jsload "bog.core/on-figwheel-reload"}
 
                 :compiler {:main bog.core
-                           :asset-path "js/compiled/out"
+                           :asset-path "/js/compiled/out"
                            :output-to "resources/public/js/compiled/bog.js"
                            :output-dir "resources/public/js/compiled/out"
                            :source-map-timestamp true}}
