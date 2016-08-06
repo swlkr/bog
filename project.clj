@@ -25,7 +25,8 @@
                  [bidi "1.20.3"]
                  [kibu/pushy "0.3.2"]
                  [cljs-http "0.1.41"]
-                 [ring/ring-mock "0.3.0"]]
+                 [ring/ring-mock "0.3.0"]
+                 [proto-repl "0.3.1"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
