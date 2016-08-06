@@ -1,18 +1,10 @@
 (ns bog.views.posts-view
-  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as r]
             [bog.routes :as routes]
-            [bog.app-state :refer [app-state]]
-            [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]
             [markdown.core :refer [md->html]]
+            [bog.sync :refer [build-server-args build-state-args sync!]]
+            [bog.app-state :refer [app-state]]
             [bog.components.header :refer [header]]))
-
-(defn get-posts! []
-  (go
-    (let [url "/api/posts"
-          {:keys [status body]} (<! (http/get url))]
-      (swap! app-state assoc :posts body))))
 
 (defn post [p]
   (let [{:keys [title content created_at]} p]
@@ -35,12 +27,14 @@
       ^{:key (:id p)} [post p])])
 
 (defn posts-view []
-  (get-posts!)
-  (fn []
-    (let [{:keys [posts]} @app-state]
-      [:div {:class "posts-view"}
-        [header]
-        [:div {:class "container-fluid"}
-          [:div {:class "row"}
-            [:div {:class "col-xs-12"}
-              [post-list posts]]]]])))
+  (let [s-args (build-server-args :get "/api/posts")
+        st-args (build-state-args assoc :posts)]
+    (sync! s-args st-args)
+    (fn []
+      (let [posts (:posts @app-state)]
+        [:div {:class "posts-view"}
+          [header]
+          [:div {:class "container-fluid"}
+            [:div {:class "row"}
+              [:div {:class "col-xs-12"}
+                [post-list posts]]]]]))))

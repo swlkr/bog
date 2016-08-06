@@ -1,32 +1,16 @@
 (ns bog.views.drafts-view
-  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as r]
             [bog.routes :as routes]
+            [bog.sync :refer [build-server-args build-state-args sync!]]
             [bog.app-state :refer [app-state]]
-            [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]
             [markdown.core :refer [md->html]]
             [bog.components.header :refer [header]]))
 
-(defn get-drafts! []
-  (go
-    (let [url "/api/drafts"
-          {:keys [access-token]} @app-state
-          {:keys [status body]} (<! (http/get url {:headers {"Authorization" access-token}}))]
-      (swap! app-state assoc :drafts body))))
-
-(defn edit-draft-clicked [e d]
-  (do
-    (.preventDefault e)
-    (swap! app-state assoc :edit-draft d)
-    (routes/set-page! {:handler :edit-draft})))
-
 (defn draft [d]
-  (let [{:keys [title content created_at]} d]
-      [:a {:href "#" :class "list-group-item" :on-click (fn [e] (edit-draft-clicked e d))}
+  (let [{:keys [id title content created_at]} d]
+      [:a {:href (routes/url-for :edit-draft :id id) :class "list-group-item"}
         [:h4 {:class "list-group-item-heading"} title]
         [:p {:class "list-group-item-text text-muted"} created_at]]))
-
 
 (defn draft-list [drafts]
   [:div {:class "row"}
@@ -36,12 +20,14 @@
           ^{:key (:id d)} [draft d])]]])
 
 (defn drafts-view []
-  (get-drafts!)
-  (fn []
-    (let [drafts (:drafts @app-state)]
-      [:div {:class "drafts-view"}
-        [header]
-        [:div {:class "container-fluid"}
-          [:div {:class "row"}
-            [:div {:class "col-xs-12"}
-              [draft-list drafts]]]]])))
+  (let [s-args (build-server-args :get "/api/drafts")
+        st-args (build-state-args assoc :posts)]
+    (sync! s-args st-args :auth true)
+    (fn []
+      (let [drafts (:drafts @app-state)]
+        [:div {:class "drafts-view"}
+          [header]
+          [:div {:class "container-fluid"}
+            [:div {:class "row"}
+              [:div {:class "col-xs-12"}
+                [draft-list drafts]]]]]))))

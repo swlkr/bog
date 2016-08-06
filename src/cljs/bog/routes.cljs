@@ -7,9 +7,9 @@
 
 (def routes ["/" {"" :posts
                   "login" :login
-                  "new-post" :new-post
-                  "edit-draft" :edit-draft
-                  "drafts" :drafts}])
+                  "posts" {"" :new-post}
+                  "drafts" {"" :drafts
+                            ["/" :id "/edit"] :edit-draft}}])
 
 (def url-for (partial bidi/path-for routes))
 
@@ -21,12 +21,12 @@
 (def auth-routes [:new-post])
 
 (defn set-page! [match]
-  (let [route (:handler match)]
+  (let [{:keys [handler route-params]} match]
     (if (and
           (not (has-token?))
-          (= route :new-post))
+          (= handler :new-post))
       (aset js/location "href" "/login")
-      (swap! app-state assoc :view route))))
+      (swap! app-state assoc :view handler :route-params route-params))))
 
 (def history
   (pushy/pushy set-page! (partial bidi/match-route routes)))

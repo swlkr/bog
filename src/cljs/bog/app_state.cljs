@@ -12,4 +12,8 @@
                             :new-post {:title ""
                                        :content ""
                                        :type "post"}
-                            :view :posts}))
+                            :view :posts
+                            :edit-draft {:title ""
+                                         :content ""
+                                         :type "post"}
+                            :route-params {}}))

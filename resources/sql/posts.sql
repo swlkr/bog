@@ -39,3 +39,13 @@ select *
 from posts
 where draft = true
 order by created_at
+
+-- name: get-drafts-by-id
+-- Gets a list of drafts by id
+select *
+from posts
+where
+  draft = true
+  and
+  id = :id
+order by created_at
