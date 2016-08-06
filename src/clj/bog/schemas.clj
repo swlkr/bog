@@ -28,7 +28,8 @@
                         (s/optional-key :title) s/Str
                         (s/optional-key :content) s/Str
                         (s/optional-key :draft) s/Bool
-                        (s/optional-key :type) (s/enum :post :quote :video :slideshow)})
+                        (s/optional-key :type) (s/enum :post :quote :video :slideshow)
+                        (s/optional-key :created_at) s/Str})
 
 (def parse-post-request
  (coerce/coercer! PostRequest coerce/json-coercion-matcher))

@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [bog.routes :as routes]
             [markdown.core :refer [md->html]]
-            [bog.sync :refer [build-server-args build-state-args sync!]]
+            [bog.sync :refer [build-args sync!]]
             [bog.app-state :refer [app-state]]
             [bog.components.header :refer [header]]))
 
@@ -27,9 +27,9 @@
       ^{:key (:id p)} [post p])])
 
 (defn posts-view []
-  (let [s-args (build-server-args :get "/api/posts")
-        st-args (build-state-args assoc :posts)]
-    (sync! s-args st-args)
+  (let [server (build-args :get "/api/posts")
+        state [:posts]]
+    (sync! server state)
     (fn []
       (let [posts (:posts @app-state)]
         [:div {:class "posts-view"}

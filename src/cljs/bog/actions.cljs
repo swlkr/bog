@@ -3,7 +3,8 @@
   (:require [bog.app-state :refer [app-state]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            [bog.local-storage :as storage]))
+            [bog.local-storage :as storage]
+            [bog.routes :as routes]))
 
 (defn login [e]
   (let [email (-> @app-state :login :email)
@@ -39,7 +40,7 @@
           (if (= 200 status)
             (do
               (swap! app-state update-in [:new-post] {:title "" :content "" :type "post"})
-              (swap! app-state assoc :view :posts))
+              (routes/push! "/drafts"))
             (swap! app-state assoc :error (:message body)))))))
 
 (defn update-draft! []

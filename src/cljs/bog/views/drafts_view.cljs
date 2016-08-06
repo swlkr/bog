@@ -1,7 +1,7 @@
 (ns bog.views.drafts-view
   (:require [reagent.core :as r]
             [bog.routes :as routes]
-            [bog.sync :refer [build-server-args build-state-args sync!]]
+            [bog.sync :refer [build-args sync!]]
             [bog.app-state :refer [app-state]]
             [markdown.core :refer [md->html]]
             [bog.components.header :refer [header]]))
@@ -20,9 +20,9 @@
           ^{:key (:id d)} [draft d])]]])
 
 (defn drafts-view []
-  (let [s-args (build-server-args :get "/api/drafts")
-        st-args (build-state-args assoc :posts)]
-    (sync! s-args st-args :auth true)
+  (let [server (build-args :get "/api/drafts")
+        state [:drafts]]
+    (sync! server state :auth true)
     (fn []
       (let [drafts (:drafts @app-state)]
         [:div {:class "drafts-view"}

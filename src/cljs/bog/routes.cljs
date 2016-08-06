@@ -31,5 +31,8 @@
 (def history
   (pushy/pushy set-page! (partial bidi/match-route routes)))
 
+(defn push! [path]
+  (pushy/set-token! history path))
+
 (defn app-routes []
   (pushy/start! history))
