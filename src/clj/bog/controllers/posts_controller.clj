@@ -15,6 +15,10 @@
   (-> (posts/get-list)
       (ring-response)))
 
+(defn get-post! [id]
+  (-> (posts/get-post id)
+      (ring-response)))
+
 (defn get-drafts! [request]
   (-> (posts/get-drafts)
       (ring-response)))

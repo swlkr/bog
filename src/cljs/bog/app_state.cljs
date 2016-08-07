@@ -6,6 +6,7 @@
                             :access-token nil
                             :posts []
                             :drafts []
+                            :navbar-bg-white false
                             :navbar-collapsed true
                             :login {:email ""
                                     :password ""}

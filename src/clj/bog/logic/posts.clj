@@ -47,6 +47,12 @@
        (map #(select-keys % [:id :title :content :created_at :draft]))
        (map #(format-created-at %))))
 
+(defn get-post [id]
+  (->> (db/get-posts-by-id {:id id})
+       (map #(select-keys % [:id :title :content :created_at :draft :type]))
+       (map #(format-created-at %))
+       (first)))
+
 (defn get-drafts []
   (->> (db/get-drafts)
        (map #(select-keys % [:id :title :content :created_at :draft]))

@@ -25,13 +25,18 @@ set
 where
   id = :id
 
-
 -- name: get-posts
 -- Gets a list of posts from all users
 select *
 from posts
 where draft = false
 order by created_at
+
+-- name: get-posts-by-id
+-- Gets a list of posts by id
+select *
+from posts
+where id = :id
 
 -- name: get-drafts
 -- Gets a list of drafts from all users

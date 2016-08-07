@@ -15,40 +15,40 @@
 (defn new-post-link [access-token]
   (when (not (nil? access-token))
     [navbar-link {:href (url-for :new-post)
-                  :icon "asterisk"
                   :text "New Post"}]))
 
 (defn drafts-link [access-token]
   (when (not (nil? access-token))
     [navbar-link {:href (url-for :drafts)
-                  :icon "list"
                   :text "Drafts"}]))
 
 (defn navbar []
-  (let [{:keys [navbar-collapsed access-token]} @app-state
+  (let [{:keys [navbar-collapsed access-token navbar-bg-white]} @app-state
         navbar-class (classes {"navbar-collapse" true
-                               "collapse" navbar-collapsed})]
-    [:nav {:class "navbar navbar-default navbar-fixed-top"}
-      [:div {:class "container-fluid"}
+                               "collapse" navbar-collapsed})
+        navbar-default-class (classes {"navbar" true
+                                       "navbar-default" true
+                                       "navbar-fixed-top" true
+                                       "bg-white" navbar-bg-white})]
+    [:nav {:class navbar-default-class}
+      [:div {:class "container"}
         [:div {:class "navbar-header"}
           [:button {:class "navbar-toggle collapsed" :on-click actions/toggle-navbar}
             [:span {:class "icon-bar"}]
             [:span {:class "icon-bar"}]
             [:span {:class "icon-bar"}]]
-          [:div {:class "navbar-brand text-center" :style {:marginLeft "42px"}} "Adventure Walker"]]
+          [:div {:class "navbar-brand text-center"}
+            [:a {:href (url-for :posts)}
+              "Adventure Walker"]]]
         [:div {:class navbar-class}
           [:ul {:class "nav navbar-nav navbar-right"}
             [navbar-link {:href (url-for :posts)
-                          :icon "home"
                           :text "Home"}]
             [new-post-link access-token]
             [drafts-link access-token]
             [navbar-link {:href "https://instagram.com/adventure_walker"
-                          :icon "instagram"
                           :text "Instagram"}]
             [navbar-link {:href "https://twitter.com/adventurewalkr"
-                          :icon "twitter"
                           :text "Twitter"}]
             [navbar-link {:href "https://www.pinterest.com/adventurewalkr"
-                          :icon "pinterest"
                           :text "Pinterest"}]]]]]))

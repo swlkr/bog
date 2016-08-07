@@ -8,6 +8,7 @@
             [bog.controllers.tokens-controller :refer [create-token!]]
             [bog.controllers.status-controller :refer [get-status]]
             [bog.controllers.posts-controller :refer [get-posts!
+                                                      get-post!
                                                       create-post!
                                                       get-drafts!
                                                       update-post!
@@ -24,11 +25,12 @@
 
 ; api routes
 (defroutes api-routes
-  (GET "/api/status" request (get-status request))
-  (POST "/api/users" request (create-user! request))
-  (GET "/api/posts" request (get-posts! request))
-  (POST "/api/tokens" request (create-token! request))
-  (POST "/api/comments" request (create-comment! request))
+  (GET "/api/status" req (get-status req))
+  (POST "/api/users" req (create-user! req))
+  (GET "/api/posts" req (get-posts! req))
+  (GET "/api/posts/:id" [id :<< as-int :as req] (get-post! id))
+  (POST "/api/tokens" req (create-token! req))
+  (POST "/api/comments" req (create-comment! req))
   (GET "/api/posts/:id/comments" [id :<< as-int] (get-comments! id))
   (wrap-routes protected-api-routes wrap-jwt-auth))
 
@@ -43,6 +45,7 @@
   (GET "/" _ (client-response))
   (GET "/login" _ (client-response))
   (GET "/posts/new" _ (client-response))
+  (GET "/posts/:id" _ (client-response))
   (GET "/drafts" _ (client-response))
   (GET "/drafts/:id/edit" _ (client-response))
   (resources "/")

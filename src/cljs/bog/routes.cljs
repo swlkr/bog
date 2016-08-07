@@ -7,7 +7,8 @@
 
 (def routes ["/" {"" :posts
                   "login" :login
-                  "posts" {"" :new-post}
+                  "posts" {"" :new-post
+                           ["/" :id] :post}
                   "drafts" {"" :drafts
                             ["/" :id "/edit"] :edit-draft}}])
 

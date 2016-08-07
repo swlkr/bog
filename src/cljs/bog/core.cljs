@@ -3,6 +3,7 @@
             [bog.app-state :refer [app-state]]
             [bog.routes :refer [app-routes]]
             [bog.views.posts-view :refer [posts-view]]
+            [bog.views.post-view :refer [post-view]]
             [bog.views.login-view :refer [login-view]]
             [bog.views.new-post :refer [new-post]]
             [bog.views.drafts-view :refer [drafts-view]]
@@ -18,6 +19,7 @@
 (defmethod views :posts [] posts-view)
 (defmethod views :login [] login-view)
 (defmethod views :new-post [] new-post)
+(defmethod views :post [] post-view)
 (defmethod views :drafts [] drafts-view)
 (defmethod views :edit-draft [] edit-draft-view)
 (defmethod views :default [] (:h1 "Not found"))
