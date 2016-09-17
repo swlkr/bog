@@ -26,7 +26,7 @@
   (let [keys (keys (filter-nil-vals data))]
     (apply dissoc data keys)))
 
-(defn ensure! [f arg err]
+(defn ensure! [err f arg]
   (if (apply f [arg])
     arg
     (throw+ err)))
