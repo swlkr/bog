@@ -40,15 +40,7 @@
     (nil? (k m))))
 
 (defn has-keys? [m keys]
-  (every? true? (map #(contains? m %) keys)))
-
-(defn ensure-has-keys [m ks]
-  (if (has-keys? m ks)
-    m
-    (throw+
-      (str
-        "Missing parameters. Expected: "
-        (clojure.string/join ", " (map #(str (name %)) ks))))))
+  (every? (partial contains? m) keys))
 
 (defn seq-contains? [coll target]
   (some #(= target %) coll))
