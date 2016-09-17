@@ -4,14 +4,12 @@ insert into posts (
   user_id,
   title,
   content,
-  type,
-  draft
+  type
 ) values (
   :user_id,
   :title,
   :content,
-  :type,
-  :draft
+  :type
 )
 
 -- name: update-post<!
@@ -20,8 +18,7 @@ update posts
 set
   title = :title,
   content = :content,
-  type = :type,
-  draft = :draft
+  type = :type
 where
   id = :id
 
@@ -29,28 +26,11 @@ where
 -- Gets a list of posts from all users
 select *
 from posts
-where draft = false
-order by created_at
+where user_id = :user_id
+order by sort_order asc, created_at desc
 
 -- name: get-posts-by-id
 -- Gets a list of posts by id
 select *
 from posts
 where id = :id
-
--- name: get-drafts
--- Gets a list of drafts from all users
-select *
-from posts
-where draft = true
-order by created_at
-
--- name: get-drafts-by-id
--- Gets a list of drafts by id
-select *
-from posts
-where
-  draft = true
-  and
-  id = :id
-order by created_at
