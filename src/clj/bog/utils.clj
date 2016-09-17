@@ -1,8 +1,8 @@
 (ns bog.utils)
 
-(defn throw+ [msg]
-  (throw
-    (ex-info msg {})))
+(defn throw+
+  ([msg] (throw (ex-info msg {})))
+  ([msg data] (throw (ex-info msg data))))
 
 (defn nil-val? [[k v]]
   (nil? v))
