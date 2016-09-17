@@ -13,12 +13,13 @@
 
 (defn wrap-jwt-auth [handler]
   (fn [request]
-    (let [{:keys [headers]} request
+    (let [authorization (get-in request [:headers "authorization"])
           secret (env :secret)
-          user (tokens/decode! (get headers "authorization") secret)
-          req (assoc request :user user)]
+          user (tokens/decode! authorization secret)
+          req (assoc request :user user)
+          r (assoc-in req [:body :user_id] (:id user))]
       (if (not (nil? user))
-        (handler req)
+        (handler r)
         (throw
           (ex-info "You don't have permission to do that"
             {:status 401}))))))
