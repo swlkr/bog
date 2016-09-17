@@ -1,6 +1,6 @@
 (ns bog.routes
   (:require [clojure.java.io :as io]
-            [compojure.core :refer [GET POST PUT wrap-routes defroutes]]
+            [compojure.core :refer [GET POST PUT wrap-routes defroutes context]]
             [compojure.route :refer [resources not-found]]
             [compojure.coercions :refer [as-int]]
             [bog.middleware :refer [wrap-jwt-auth]]
@@ -10,18 +10,21 @@
             [bog.controllers.posts-controller :refer [get-posts!
                                                       get-post!
                                                       create-post!
-                                                      get-drafts!
-                                                      update-post!
-                                                      get-draft!]]
-            [bog.controllers.comments-controller :refer [create-comment! get-comments!]]))
+                                                      update-post!]]
+            [bog.controllers.comments-controller :refer [create-comment! get-comments!]]
+            [bog.controllers.drafts-controller :as drafts-controller]))
 
 ; protected api routes
 (defroutes protected-api-routes
-  (GET "/api/protected-status" request (get-status request))
-  (POST "/api/posts" request (create-post! request))
-  (GET "/api/drafts" request (get-drafts! request))
-  (GET "/api/drafts/:id" [id :<< as-int :as request] (get-draft! id))
-  (PUT "/api/posts/:id" [id :<< as-int :as request] (update-post! request id)))
+  (context "/api" []
+    (GET "/protected-status" request (get-status request))
+    (context "/drafts" []
+      (POST "/" request (drafts-controller/create! request)))
+      ;(GET "/" request (get-drafts! request))
+      ;(GET "/:id" [id :<< as-int :as request] (get-draft! id)))
+    (context "/posts" []
+      (POST "/" request (create-post! request))
+      (PUT "/:id" [id :<< as-int :as request] (update-post! request id)))))
 
 ; api routes
 (defroutes api-routes
