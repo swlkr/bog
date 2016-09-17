@@ -22,19 +22,20 @@ update drafts
 set
   title = :title,
   content = :content,
-  type = :type
+  type = :type,
+  sort_order = :sort_order
 where
-  id = :id
+  id = :id::uuid
 
 -- name: get-drafts
 -- Gets a list of drafts for given user
 select *
 from drafts
 where user_id = :user_id
-order by created_at desc
+order by sort_order asc, created_at desc
 
 -- name: get-drafts-by-id
 -- Gets a list of drafts by id
 select *
 from drafts
-where id = :id
+where id = :id::uuid

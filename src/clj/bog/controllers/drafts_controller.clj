@@ -8,3 +8,23 @@
        (drafts/pre-create)
        (db/insert-draft<!)
        (utils/ring-response)))
+
+(defn list! [request]
+  (-> (-> request :body)
+      (drafts/make-list-params)
+      (db/get-drafts)
+      (utils/ring-response)))
+
+(defn get! [id]
+  (-> id
+      (drafts/make-get-params)
+      (db/get-drafts-by-id)
+      (first)
+      (utils/ring-response)))
+
+(defn update! [id request]
+  (->> (-> request :body)
+       (merge {:id id})
+       (drafts/pre-update)
+       (db/update-draft<!)
+       (utils/ring-response)))
