@@ -17,7 +17,7 @@
 
 (defn get! [id]
   (-> id
-      (drafts/make-get-params)
+      (drafts/make-id-params)
       (db/get-drafts-by-id)
       (first)
       (utils/ring-response)))
@@ -28,3 +28,9 @@
        (drafts/pre-update)
        (db/update-draft<!)
        (utils/ring-response)))
+
+(defn delete! [id]
+  (-> id
+      (drafts/make-id-params)
+      (db/delete-draft<!)
+      (utils/ring-response)))

@@ -39,3 +39,9 @@ order by sort_order asc, created_at desc
 select *
 from drafts
 where id = :id::uuid
+
+-- name: delete-draft<!
+-- Deletes a draft
+delete
+from drafts
+where id = :id::uuid

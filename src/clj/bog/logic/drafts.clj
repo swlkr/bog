@@ -27,7 +27,7 @@
   (let [{:keys [user_id]} m]
     {:user_id user_id}))
 
-(defn make-get-params [id]
+(defn make-id-params [id]
   {:id id})
 
 (def update-keys [:id :title :content :type :sort_order])

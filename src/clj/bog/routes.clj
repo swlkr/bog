@@ -1,6 +1,6 @@
 (ns bog.routes
   (:require [clojure.java.io :as io]
-            [compojure.core :refer [GET POST PUT wrap-routes defroutes context]]
+            [compojure.core :refer [GET POST PUT DELETE wrap-routes defroutes context]]
             [compojure.route :refer [resources not-found]]
             [compojure.coercions :refer [as-int]]
             [bog.middleware :refer [wrap-jwt-auth]]
@@ -22,7 +22,8 @@
       (POST "/" request (drafts-controller/create! request))
       (GET "/" request (drafts-controller/list! request))
       (GET "/:id" [id] (drafts-controller/get! id))
-      (PUT "/:id" [id :as request] (drafts-controller/update! id request)))
+      (PUT "/:id" [id :as request] (drafts-controller/update! id request))
+      (DELETE "/:id" [id] (drafts-controller/delete! id)))
     (context "/posts" []
       (POST "/" request (create-post! request))
       (PUT "/:id" [id :<< as-int :as request] (update-post! request id)))))
