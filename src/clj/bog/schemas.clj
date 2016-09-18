@@ -20,6 +20,7 @@
 (def PostRequest {:user Token
                   :title s/Str
                   :content s/Str
+                  :user_id s/Int
                   (s/optional-key :draft) s/Bool
                   :type (s/enum :post :quote :video :slideshow)})
 

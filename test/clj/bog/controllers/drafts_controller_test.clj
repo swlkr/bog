@@ -1,4 +1,4 @@
-(ns bog.controllers.posts-controller-test
+(ns bog.controllers.drafts-controller-test
   (:require [clojure.test :refer :all]
             [bog.server :refer [http-handler]]
             [clojure.data.json :as json]
@@ -7,52 +7,56 @@
             [environ.core :refer [env]]
             [bog.logic.tokens :as tokens]))
 
-(deftest create-post-test
-  (with-redefs [db/insert-post<! (fn [params] params)
+(deftest create-draft-test
+  (with-redefs [db/insert-draft<! (fn [params] params)
                 env {:secret "shhhhh"}
                 tokens/decode! (fn [token secret] {:id 1})]
 
-    (testing "with invalid post type"
-      (let [request (build-request :url "/api/posts"
+    (testing "with invalid draft data"
+      (let [request (build-request :url "/api/drafts"
                                    :method :post
                                    :body {:title "a"
                                           :content "b"
                                           :type "a"
-                                          :draft false})
+                                          :sort_order 0
+                                          :id "931CA995-204C-4A21-A750-F7883899F631"})
             expected {:status 500
-                      :body (json/write-str {:message "Value cannot be coerced to match schema: {:type (not (#{:video :quote :post :slideshow} :a))}"})
+                      :body (json/write-str {:message "Draft can only be quote, post, video or slideshow"})
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
         (is
           (= expected
             (http-handler request)))))
 
     (testing "with nil title"
-      (let [request (build-request :url "/api/posts"
+      (let [request (build-request :url "/api/drafts"
                                    :method :post
                                    :body {:title nil
                                           :content "b"
                                           :type "post"
-                                          :draft false})
+                                          :sort_order 0})
             expected {:status 500
-                      :body (json/write-str {:message "Value cannot be coerced to match schema: {:title (not (instance? java.lang.String nil))}"})
+                      :body (json/write-str {:message "Missing parameters. Expected: id, user_id, title, content, type, sort_order"})
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
         (is
           (= expected
             (http-handler request)))))
 
-    (testing "with valid post"
-      (let [request (build-request :url "/api/posts"
+    (testing "with valid draft"
+      (let [request (build-request :url "/api/drafts"
                                    :method :post
                                    :body {:title "title"
                                           :content "content"
                                           :type "post"
-                                          :draft false})
+                                          :sort_order 0
+                                          :id "931CA995-204C-4A21-A750-F7883899F631"})
+
             expected {:status 200
-                      :body (json/write-str {:user_id 1
+                      :body (json/write-str {:id "931CA995-204C-4A21-A750-F7883899F631"
+                                             :user_id 1
                                              :title "title"
                                              :content "content"
                                              :type "post"
-                                             :draft false})
+                                             :sort_order 0})
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
         (is
           (= expected
