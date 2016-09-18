@@ -1,5 +1,6 @@
-(ns bog.controllers.status-controller)
+(ns bog.controllers.status-controller
+  (:refer-clojure :exclude [get]))
 
-(defn get-status [request]
+(defn get [request]
   {:status 200
    :body {:message "alive"}})

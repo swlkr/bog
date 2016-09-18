@@ -2,13 +2,19 @@
   (:require [bog.logic.users :as users]
             [bog.logic.tokens :as tokens]
             [environ.core :refer [env]]
-            [bog.utils :refer [throw+ ring-response]]))
+            [bog.utils :as utils]
+            [bog.db :as db]))
 
-(defn create-user! [request]
-  (let [{:keys [secret database-url]} env]
-    (as-> request r
-          (users/create! r secret)
-          (select-keys r [:id])
+(defn id->str [m]
+  (assoc m :id (.toString (:id m))))
+
+(defn create! [request]
+  (let [{:keys [secret]} env]
+    (as-> (:body request) r
+          (users/pre-create r)
+          (db/insert-user<! r)
+          (select-keys r [:id :email])
+          (id->str r)
           (tokens/generate r secret)
-          (assoc {} :access-token r)
-          (ring-response r))))
+          (hash-map :access-token r)
+          (utils/ring-response r))))

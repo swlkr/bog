@@ -2,10 +2,10 @@
   (:require [bog.utils :as utils :refer [throw+ ensure!]]
             [clojurewerkz.scrypt.core :as sc]
             [bog.db :as db]
-            [bog.schemas :refer [SignUpRequest LoginRequest]]
-            [schema.core :as s]))
+            [bog.utils :as utils]
+            [bog.errors :as errors]))
 
-;;; Signing up
+; Signing up
 
 (defn matches-confirm-password? [{:keys [password password-confirm]}]
   (and
@@ -19,38 +19,25 @@
       (> len 12)
       (< len 101))))
 
-(defn ensure-valid-password [params]
-  (->> params
-       (ensure! "Password and confirm password don't match" matches-confirm-password?)
-       (ensure! "Password needs to be at least 13 characters long" is-password-long-enough?)))
-
-(defn is-valid-email? [{:keys [email]}]
-  (let [pattern #"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"]
-    (and
-      (string? email)
-      (not (nil? (re-matches pattern email))))))
-
-(defn ensure-valid-email [data]
-  (let [{:keys [email]} data]
-    (ensure! "That email address is invalid" is-valid-email? data)))
-
 (defn encrypt-password [params]
   (let [{:keys [password]} params
         p (sc/encrypt password 16384 8 1)]
-    (assoc params :encrypted-password p)))
+    (assoc params :password p)))
 
-(defn format-sql-params [params]
-  (let [{:keys [email encrypted-password]} params]
-    {:email email :password encrypted-password}))
+(defn valid-email? [email]
+  (and
+    (string? email)
+    (not (nil? (clojure.string/index-of email "@")))))
 
-(defn create! [request secret]
-  (->> (:body request)
-       (s/validate SignUpRequest)
-       ensure-valid-email
-       ensure-valid-password
-       encrypt-password
-       format-sql-params
-       db/insert-user<!))
+(defn pre-create [body]
+  (let [ks [:id :email :password :password-confirm]]
+    (->> (select-keys body ks)
+         (utils/ensure! "A map is required" map?)
+         (utils/ensure! (errors/missing-keys ks) (partial utils/keys? ks))
+         (utils/ensure! "That email address is invalid" (comp valid-email? :email))
+         (utils/ensure! "Password and confirm password don't match" matches-confirm-password?)
+         (utils/ensure! "Password needs to be at least 13 characters long" is-password-long-enough?)
+         (encrypt-password))))
 
 ;;; Logging in
 
@@ -58,17 +45,15 @@
   (let [{:keys [password]} db-params]
     (sc/verify (:password http-params) password)))
 
-(defn ensure-matching-password [db-params http-params]
-  (if (is-matching-password? db-params http-params)
-    db-params
-    (throw+ "Incorrect password")))
-
-(defn login! [request secret]
-  (as-> (:body request) r
-        (s/validate LoginRequest r)
-        (db/get-users-by-email r)
-        (first r)
-        (ensure! "There was no user with that email would you like to sign up?" (comp not nil?) r)
-        (select-keys r [:id :email :password])
-        (ensure-matching-password r (:body request))
-        (select-keys r [:id])))
+(defn verify! [body]
+  (let [ks [:email :password]]
+    (as-> body b
+          (utils/ensure! "A map is required" map? b)
+          (select-keys b ks)
+          (utils/ensure! (errors/missing-keys ks) (partial utils/keys? ks) b)
+          (db/get-users-by-email b)
+          (first b)
+          (utils/ensure! "There was no user with that email. Would you like to sign up?" (comp not nil?) b)
+          (select-keys b [:id :email :password])
+          (utils/ensure! "Incorrect password" (partial is-matching-password? b) body)
+          (select-keys b [:id]))))

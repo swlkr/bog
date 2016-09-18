@@ -1,0 +1,9 @@
+{:up ["DROP TABLE users;"]
+ :down [
+  "create table users (
+    id bigserial primary key,
+    email text not null,
+    password text not null,
+    created_at timestamp without time zone default (now() at time zone 'utc'),
+    CONSTRAINT unique_email UNIQUE(email)
+  )"]}

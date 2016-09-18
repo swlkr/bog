@@ -2,12 +2,12 @@
   (:require [bog.logic.users :as users]
             [bog.logic.tokens :as tokens]
             [environ.core :refer [env]]
-            [bog.utils :refer [throw+ ring-response]]))
+            [bog.utils :as utils]))
 
-(defn create-token! [request]
-  (let [{:keys [secret database-url]} env]
-    (as-> request r
-          (users/login! r secret)
-          (tokens/generate r secret)
-          (assoc {} :access-token r)
-          (ring-response r))))
+(defn create! [request]
+  (let [{:keys [secret]} env]
+    (as-> (:body request) body
+          (users/verify! body)
+          (tokens/generate body secret)
+          (hash-map :access-token body)
+          (utils/ring-response body))))
