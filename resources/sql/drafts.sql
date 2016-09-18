@@ -20,10 +20,10 @@ insert into drafts (
 -- Updates a draft
 update drafts
 set
-  title = :title,
-  content = :content,
-  type = :type,
-  sort_order = :sort_order
+  title = coalesce(:title, title),
+  content = coalesce(:content, content),
+  type = coalesce(:type, type),
+  sort_order = coalesce(:sort_order, sort_order)
 where
   id = :id::uuid
 

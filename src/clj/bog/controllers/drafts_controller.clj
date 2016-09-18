@@ -11,13 +11,12 @@
 
 (defn list! [request]
   (-> (-> request :body)
-      (drafts/make-list-params)
+      (select-keys [:user_id])
       (db/get-drafts)
       (utils/ring-response)))
 
 (defn get! [id]
-  (-> id
-      (drafts/make-id-params)
+  (-> {:id id}
       (db/get-drafts-by-id)
       (first)
       (utils/ring-response)))
@@ -30,7 +29,6 @@
        (utils/ring-response)))
 
 (defn delete! [id]
-  (-> id
-      (drafts/make-id-params)
+  (-> {:id id}
       (db/delete-draft<!)
       (utils/ring-response)))

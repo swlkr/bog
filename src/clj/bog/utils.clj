@@ -42,5 +42,8 @@
 (defn has-keys? [m keys]
   (every? (partial contains? m) keys))
 
+(defn keys? [ks m]
+  (every? (partial contains? m) ks))
+
 (defn seq-contains? [coll target]
   (some #(= target %) coll))

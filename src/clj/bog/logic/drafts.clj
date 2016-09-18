@@ -3,48 +3,16 @@
             [bog.utils :as utils]
             [bog.errors :as errors]))
 
-(def insert-keys [:id :user_id :title :content :type :sort_order])
-(def missing-insert-keys (errors/missing-keys insert-keys))
-(defn insert-request? [m]
-  (utils/has-keys? m insert-keys))
-
-(defn make-insert-params [m]
-  (let [{:keys [id user_id title content sort_order type]} m]
-    {:user_id user_id
-     :id id
-     :title title
-     :content content
-     :type (name type)
-     :sort_order sort_order}))
-
 (defn pre-create [req]
-  (->> req
-       (utils/ensure! "A map is required" map?)
-       (utils/ensure! missing-insert-keys insert-request?)
-       (make-insert-params)))
-
-(defn make-list-params [m]
-  (let [{:keys [user_id]} m]
-    {:user_id user_id}))
-
-(defn make-id-params [id]
-  {:id id})
-
-(def update-keys [:id :title :content :type :sort_order])
-(def missing-update-keys (errors/missing-keys update-keys))
-(defn update-request? [m]
-  (utils/has-keys? m update-keys))
-
-(defn make-update-params [m]
-  (let [{:keys [id title content sort_order type]} m]
-    {:id id
-     :title title
-     :content content
-     :type (name type)
-     :sort_order sort_order}))
+  (let [ks [:id :user_id :title :content :type :sort_order]]
+    (->> (select-keys req ks)
+         (utils/ensure! "A map is required" map?)
+         (utils/ensure! (errors/missing-keys ks) (partial utils/keys? ks)))))
 
 (defn pre-update [req]
-  (->> req
-       (utils/ensure! "A map is required" map?)
-       (utils/ensure! missing-update-keys update-request?)
-       (make-update-params)))
+  (let [ks [:id]
+        opt-ks [:title :content :type :sort_order]]
+    (->> (select-keys req (concat ks opt-ks))
+         (utils/ensure! "A map is required" map?)
+         (utils/ensure! (errors/missing-keys ks) (partial utils/keys? ks))
+         (merge {:title nil :content nil :type nil :sort_order nil}))))
