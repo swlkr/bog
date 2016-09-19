@@ -8,33 +8,32 @@
 
 (deftest create-user-with-mismatch-password-test
   (with-redefs [db/insert-user<! (fn [params] {})]
-    (let [request {:body {:email "swlkr.rbl@gmail.com" :password "password" :password-confirm "pw"}}]
+    (let [body {:id "" :email "swlkr.rbl@gmail.com" :password "password" :password-confirm "pw"}]
       (is
         (thrown-with-msg?
           java.lang.Exception
           #"Password and confirm password don't match"
-          (create! request secret))))))
+          (pre-create body))))))
 
 (deftest create-user-with-invalid-password-test
   (with-redefs [db/insert-user<! (fn [params] {})]
-    (let [request {:body {:email "swlkr.rbl@gmail.com" :password "password" :password-confirm "password"}}]
+    (let [body {:id "" :email "swlkr.rbl@gmail.com" :password "password" :password-confirm "password"}]
       (is
         (thrown-with-msg?
           java.lang.Exception
           #"Password needs to be at least 13 characters long"
-          (create! request secret))))))
+          (pre-create body))))))
 
 (deftest create-user-with-valid-request-test
-  (let [request {:body {:email "swlkr.rbl@gmail.com" :password "correct horse battery staple" :password-confirm "correct horse battery staple"}}
-        expected [:email :password]]
+  (let [body {:id "" :email "swlkr.rbl@gmail.com" :password "correct horse battery staple" :password-confirm "correct horse battery staple"}
+        expected [:id :email :password :password-confirm]]
     (with-redefs [db/insert-user<! (fn [params] {:email "email" :password "pw"})]
-      (is (= expected (keys (create! request secret)))))))
+      (is (= expected (keys (pre-create body)))))))
 
 (deftest login-with-db-params
-    (let [expected {:id 1}
-          body {:email "email" :password "pw"}
-          request {:body body}
+    (let [expected {:id "FE100AF2-2116-4781-9E31-3CFAFA6EFC09"}
+          body {:id "" :email "email" :password "pw"}
           enc-params (encrypt-password body)
-          db-results [{:id 1 :email "email" :password (:encrypted-password enc-params)}]]
+          db-results [{:id "FE100AF2-2116-4781-9E31-3CFAFA6EFC09" :email "email" :password (:password enc-params)}]]
       (with-redefs [db/get-users-by-email (fn [params] db-results)]
-        (is (= expected (login! request secret))))))
+        (is (= expected (verify! body))))))
