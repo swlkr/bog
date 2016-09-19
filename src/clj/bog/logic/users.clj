@@ -41,7 +41,7 @@
 
 ;;; Logging in
 
-(defn is-matching-password? [db-params http-params]
+(defn is-matching-password? [http-params db-params]
   (let [{:keys [password]} db-params]
     (sc/verify (:password http-params) password)))
 
@@ -55,5 +55,5 @@
           (first b)
           (utils/ensure! "There was no user with that email. Would you like to sign up?" (comp not nil?) b)
           (select-keys b [:id :email :password])
-          (utils/ensure! "Incorrect password" (partial is-matching-password? b) body)
+          (utils/ensure! "Incorrect password" (partial is-matching-password? body) b)
           (select-keys b [:id]))))
