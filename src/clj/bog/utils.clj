@@ -45,3 +45,9 @@
         (string/replace #">" "&gt;")
         (string/replace #"\"" "&quot;"))
     val))
+
+(defn blank? [[k v]]
+  (if (string? v)
+    (or (empty? v)
+        (nil? v))
+    false))
