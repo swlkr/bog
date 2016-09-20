@@ -1,0 +1,9 @@
+{:up ["create table posts (
+    id uuid primary key,
+    user_id uuid not null,
+    title text not null,
+    content text not null,
+    type text not null,
+    sort_order int not null,
+    created_at timestamp without time zone default (now() at time zone 'utc'));"]
+ :down ["drop table posts;"]}

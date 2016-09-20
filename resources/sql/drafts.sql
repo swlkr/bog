@@ -9,7 +9,7 @@ insert into drafts (
   type
 ) values (
   :id::uuid,
-  :user_id,
+  :user_id::uuid,
   :title,
   :content,
   :sort_order,
@@ -31,7 +31,7 @@ where
 -- Gets a list of drafts for given user
 select *
 from drafts
-where user_id = :user_id
+where user_id = :user_id::uuid
 order by sort_order asc, created_at desc
 
 -- name: get-drafts-by-id
