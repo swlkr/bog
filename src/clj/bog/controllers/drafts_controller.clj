@@ -3,30 +3,25 @@
             [bog.db :as db]
             [bog.utils :as utils]))
 
-(defn create! [request]
-  (->> (-> request :body)
-       (drafts/pre-create)
-       (db/insert-draft<!)
-       (utils/ring-response)))
+(defn create! [body]
+  (-> (drafts/pre-create body)
+      (db/insert-draft<!)
+      (utils/ring-response)))
 
-(defn list! [request]
-  (-> (-> request :body)
-      (select-keys [:user_id])
-      (db/get-drafts)
+(defn list! [user_id]
+  (-> (db/get-drafts {:user_id user_id})
       (utils/ring-response)))
 
 (defn get! [id]
-  (-> {:id id}
-      (db/get-drafts-by-id)
+  (-> (db/get-drafts-by-id {:id id})
       (first)
       (utils/ring-response)))
 
-(defn update! [id request]
-  (->> (-> request :body)
-       (merge {:id id})
-       (drafts/pre-update)
-       (db/update-draft<!)
-       (utils/ring-response)))
+(defn update! [id body]
+  (-> (merge {:id id} body)
+      (drafts/pre-update)
+      (db/update-draft<!)
+      (utils/ring-response)))
 
 (defn delete! [id]
   (-> {:id id}

@@ -3,11 +3,14 @@
             [clj-time.core :refer [now plus days]]
             [environ.core :refer [env]]))
 
+(defn id->str [m]
+  (assoc m :id (.toString (:id m))))
+
 (defn generate [payload secret]
   (let [claim {:iss "self"
                :exp (plus (now) (days 1))
                :iat (now)}]
-    (-> payload
+    (-> (id->str payload)
         (merge claim)
         (jwt)
         (sign :HS256 secret)

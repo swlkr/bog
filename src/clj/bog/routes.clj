@@ -19,11 +19,12 @@
   (context "/api" []
     (GET "/protected-status" request (status-controller/get request))
     (context "/drafts" []
-      (POST "/" request (drafts-controller/create! request))
-      (GET "/" request (drafts-controller/list! request))
-      (GET "/:id" [id] (drafts-controller/get! id))
-      (PUT "/:id" [id :as request] (drafts-controller/update! id request))
-      (DELETE "/:id" [id] (drafts-controller/delete! id)))
+      (POST "/" {body :body} (drafts-controller/create! body))
+      (GET "/" {:keys [user]} (drafts-controller/list! (:id user)))
+      (context "/:id" [id]
+        (GET "/" [] (drafts-controller/get! id))
+        (PUT "/" {body :body} (drafts-controller/update! id body))
+        (DELETE "/" [] (drafts-controller/delete! id))))
     (context "/posts" []
       (POST "/" request (create-post! request))
       (PUT "/:id" [id :<< as-int :as request] (update-post! request id)))))
