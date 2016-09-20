@@ -2,10 +2,6 @@
   (:require [bog.utils :as utils]
             [bog.errors :as errors]))
 
-(defn format-created-at [m]
-  (let [{:keys [created_at]} m]
-    (assoc m :created_at (utils/format-date created_at "MMMM dd yyyy"))))
-
 (defn pre-create [m]
   (let [ks [:id :user_id :title :content :type :sort_order]
         post-types #{"post" "quote" "video" "slideshow"}]
