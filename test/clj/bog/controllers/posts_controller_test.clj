@@ -10,7 +10,7 @@
 (deftest create-post-test
   (with-redefs [db/insert-post<! (fn [params] params)
                 env {:secret "shhhhh"}
-                tokens/decode! (fn [token secret] {:id 1})]
+                tokens/decode! (fn [token secret] {:id "uuid"})]
 
     (testing "with invalid post type"
       (let [request (build-request :url "/api/posts"
