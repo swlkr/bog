@@ -12,16 +12,6 @@
        (filter nil-val?)
        (into {})))
 
-(defn ensure-no-nil-vals [data]
-  (let [nil-data (filter-nil-vals data)
-        a (count (keys nil-data))]
-    (if (= a 0)
-      data
-      (throw+ (-> nil-data
-                  keys
-                  first
-                  (str " was blank"))))))
-
 (defn dissoc-nil-values [data]
   (let [keys (keys (filter-nil-vals data))]
     (apply dissoc data keys)))
@@ -35,15 +25,5 @@
   {:status 200
    :body body})
 
-(defn key-is-nil? [k]
-  (fn [m]
-    (nil? (k m))))
-
-(defn has-keys? [m keys]
-  (every? (partial contains? m) keys))
-
 (defn keys? [ks m]
   (every? (partial contains? m) ks))
-
-(defn seq-contains? [coll target]
-  (some #(= target %) coll))
