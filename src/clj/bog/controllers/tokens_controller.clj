@@ -4,10 +4,10 @@
             [environ.core :refer [env]]
             [bog.utils :as utils]))
 
-(defn create! [request]
+(defn create! [body]
   (let [{:keys [secret]} env]
-    (as-> (:body request) body
-          (users/verify! body)
-          (tokens/generate body secret)
-          (hash-map :access-token body)
-          (utils/ring-response body))))
+    (as-> body b
+          (users/verify! b)
+          (tokens/generate b secret)
+          (hash-map :access-token b)
+          (utils/ring-response b))))

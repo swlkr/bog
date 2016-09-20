@@ -5,12 +5,12 @@
             [bog.utils :as utils]
             [bog.db :as db]))
 
-(defn create! [request]
+(defn create! [body]
   (let [{:keys [secret]} env]
-    (as-> (:body request) r
-          (users/pre-create r)
-          (db/insert-user<! r)
-          (select-keys r [:id :email])
-          (tokens/generate r secret)
-          (hash-map :access-token r)
-          (utils/ring-response r))))
+    (as-> body b
+          (users/pre-create b)
+          (db/insert-user<! b)
+          (select-keys b [:id :email])
+          (tokens/generate b secret)
+          (hash-map :access-token b)
+          (utils/ring-response b))))

@@ -31,8 +31,8 @@
 ; api routes
 (defroutes api-routes
   (context "/api" []
-    (POST "/users" request (users-controller/create! request))
-    (POST "/tokens" request (tokens-controller/create! request))
+    (POST "/users" {body :body} (users-controller/create! body))
+    (POST "/tokens" {body :body} (tokens-controller/create! body))
     (GET "/status" request (status-controller/get request))
     (context "/posts" []
       (GET "/" [] (posts-controller/list!))
