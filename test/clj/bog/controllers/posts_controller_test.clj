@@ -15,12 +15,15 @@
     (testing "with invalid post type"
       (let [request (build-request :url "/api/posts"
                                    :method :post
-                                   :body {:title "a"
+                                   :body {:id ""
+                                          :user_id ""
+                                          :title "a"
                                           :content "b"
                                           :type "a"
-                                          :draft false})
+                                          :sort_order 0})
+
             expected {:status 500
-                      :body (json/write-str {:message "Value cannot be coerced to match schema: {:type (not (#{:video :quote :post :slideshow} :a))}"})
+                      :body (json/write-str {:message "Post can only be quote, post, video, slideshow"})
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
         (is
           (= expected
@@ -32,9 +35,11 @@
                                    :body {:title nil
                                           :content "b"
                                           :type "post"
-                                          :draft false})
+                                          :sort_order 0
+                                          :user_id ""
+                                          :id ""})
             expected {:status 500
-                      :body (json/write-str {:message "Value cannot be coerced to match schema: {:title (not (instance? java.lang.String nil))}"})
+                      :body (json/write-str {:message "Missing parameters. Expected: id, user_id, title, content, type, sort_order"})
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
         (is
           (= expected
@@ -43,16 +48,19 @@
     (testing "with valid post"
       (let [request (build-request :url "/api/posts"
                                    :method :post
-                                   :body {:title "title"
+                                   :body {:id "uuid"
+                                          :user_id "uuid"
+                                          :title "title"
                                           :content "content"
                                           :type "post"
-                                          :draft false})
+                                          :sort_order 0})
             expected {:status 200
-                      :body (json/write-str {:user_id 1
+                      :body (json/write-str {:id "uuid"
+                                             :user_id "uuid"
                                              :title "title"
                                              :content "content"
                                              :type "post"
-                                             :draft false})
+                                             :sort_order 0})
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
         (is
           (= expected

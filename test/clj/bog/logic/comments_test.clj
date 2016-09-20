@@ -1,14 +1,12 @@
 (ns bog.logic.comments-test
   (:require [clojure.test :refer :all]
-            [bog.logic.comments :refer :all]
-            [ring.util.codec :as c]))
+            [bog.logic.comments :refer :all]))
 
-(deftest create-valid
-  (let [input {:name "name" :content "<test/>" :post_id 1}
-        expected {:name "name" :content (c/url-encode (:content input)) :post_id 1}]
-    (is (= expected (create input)))))
-
-(deftest get-by-post-id-response-test
-  (let [db-rows [{:id 1 :name "a" :content "b"}]
-        expected {:body {:comments db-rows} :status 200}]
-    (is (= expected (get-by-post-id-response db-rows)))))
+(deftest create-comment
+  (testing "invalid comment"
+    (let [m {:name "first last" :content "<test/>" :post_id "" :id ""}]
+      (is (= {:name "first last" :content "&lt;test/&gt;" :post_id "" :id ""}
+             (create m)))))
+  (testing "valid comment"
+    (let [m {:name "name" :content "content" :post_id "" :id ""}]
+      (is (= m (create m))))))
