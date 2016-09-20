@@ -1,7 +1,6 @@
 (ns bog.logic.comments
   (:require [bog.utils :as utils]
-            [bog.errors :as errors]
-            [clojure.string :as string]))
+            [bog.errors :as errors]))
 
 (defn create [m]
   (let [ks [:id :post_id :name :content]]

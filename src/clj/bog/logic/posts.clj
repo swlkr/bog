@@ -9,7 +9,8 @@
          (utils/ensure! "A map is required" map?)
          (utils/ensure! (errors/missing-keys ks) (partial utils/keys? ks))
          (utils/ensure! "Post can only be quote, post, video, slideshow"
-                        (comp (partial contains? post-types) :type)))))
+                        (comp (partial contains? post-types) :type))
+         (utils/ensure! (errors/missing-keys ks) (partial every? (comp not utils/blank?))))))
 
 (defn pre-update [m]
   (let [ks [:id]
