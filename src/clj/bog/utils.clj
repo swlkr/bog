@@ -1,4 +1,5 @@
-(ns bog.utils)
+(ns bog.utils
+  (:require [clojure.string :as string]))
 
 (defn throw+
   ([msg] (throw (ex-info msg {})))
@@ -27,3 +28,20 @@
 
 (defn keys? [ks m]
   (every? (partial contains? m) ks))
+
+(defn format-date [date format-str]
+  (.format (java.text.SimpleDateFormat. format-str) date))
+
+(defn update-vals [f m]
+  (persistent!
+    (reduce-kv (fn [m k v] (assoc! m k (f v)))
+               (transient (empty m)) m)))
+
+(defn escape-html [val]
+  (if (string? val)
+    (-> val
+        (string/replace #"&" "&amp;")
+        (string/replace #"<" "&lt;")
+        (string/replace #">" "&gt;")
+        (string/replace #"\"" "&quot;"))
+    val))

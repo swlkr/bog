@@ -1,12 +1,14 @@
 (ns bog.controllers.comments-controller
-  (:require [bog.logic.comments :as comments]))
+  (:require [bog.logic.comments :as comments]
+            [bog.db :as db]
+            [bog.utils :as utils]))
 
-(defn create-comment! [request]
-  (-> (:body request)
-      comments/create!
-      comments/create-response))
+(defn create! [post_id body]
+  (-> (merge {:post_id post_id} body)
+      (comments/create)
+      (db/insert-comment<!)
+      (utils/ring-response)))
 
-(defn get-comments! [id]
-  (-> id
-      comments/get-by-post-id!
-      comments/get-by-post-id-response))
+(defn list! [post_id]
+  (-> (db/get-comments-by-post-id {:post_id post_id})
+      (utils/ring-response)))

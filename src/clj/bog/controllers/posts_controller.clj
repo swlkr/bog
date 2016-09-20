@@ -1,27 +1,28 @@
 (ns bog.controllers.posts-controller
-  (:require [bog.logic.posts :as post]
-            [environ.core :refer [env]]
-            [bog.utils :refer [throw+ ring-response]]
-            [bog.logic.posts :as posts]))
+  (:require [bog.logic.posts :as posts]
+            [bog.utils :as utils]
+            [bog.db :as db]))
 
-(defn create-post! [request]
-  (let [{:keys [body user]} request
-        input (assoc body :user user)]
-    (->> input
-         posts/create!
-         ring-response)))
+(defn create! [body]
+  (-> (posts/pre-create body)
+      (db/insert-post<!)
+      (utils/ring-response)))
 
-(defn get-posts! [request]
-  (-> (posts/get-list)
-      (ring-response)))
+(defn list! []
+  (-> (db/get-posts)
+      (utils/ring-response)))
 
-(defn get-post! [id]
-  (-> (posts/get-post id)
-      (ring-response)))
+(defn get! [id]
+  (-> (db/get-posts-by-id {:id id})
+      (first)
+      (utils/ring-response)))
 
-(defn update-post! [request id]
-  (let [{:keys [body user]} request
-        params (assoc body :user user :id id)]
-    (-> params
-        (posts/update!)
-        (ring-response))))
+(defn update! [id body]
+  (-> (merge {:id id} body)
+      (posts/pre-update)
+      (db/update-post<!)
+      (utils/ring-response)))
+
+(defn delete! [id]
+  (-> (db/delete-post<! {:id id})
+      (utils/ring-response)))

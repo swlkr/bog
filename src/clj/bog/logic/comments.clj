@@ -1,51 +1,11 @@
 (ns bog.logic.comments
-  (:require [ring.util.codec :as c]
-            [bog.db :as db]
-            [bog.schemas :refer [CommentRequest parse-comment-request]]
-            [schema.core :as s]))
-
-(defn build-sql-params [params]
-  (let [{:keys [content name post-id]} params]
-    {:post_id post-id
-     :content content
-     :name name}))
-
-(defn encode-html [params]
-  (let [{:keys [name content]} params
-        s-name (c/url-encode name)
-        s-content (c/url-encode content)]
-    (merge params {:name s-name :content s-content})))
+  (:require [bog.utils :as utils]
+            [bog.errors :as errors]
+            [clojure.string :as string]))
 
 (defn create [m]
-    (->> m
-         parse-comment-request
-         (s/validate CommentRequest)
-         encode-html
-         build-sql-params))
-
-(defn create! [params]
-  (-> params
-      create
-      db/insert-comment<!))
-
-(defn create-response [comment]
-  {:status 200
-   :body {:comment comment}})
-
-(defn get-by-post-id-sql-params [id]
-  {:post_id id})
-
-(defn get-by-post-id-response [db-rows]
-  (->> db-rows
-       (map #(select-keys % [:id :name :content :created_at]))
-       (assoc {} :comments)
-       (assoc {} :status 200 :body)))
-
-(defn get-by-post-id [id]
-  (-> id
-      get-by-post-id-sql-params))
-
-(defn get-by-post-id! [id]
-  (-> id
-      get-by-post-id
-      db/get-comments-by-post-id))
+  (let [ks [:id :post_id :name :content]]
+    (->> (select-keys m ks)
+         (utils/ensure! "A map is required" map?)
+         (utils/ensure! (errors/missing-keys ks) (partial utils/keys? ks))
+         (utils/update-vals utils/escape-html))))

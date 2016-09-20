@@ -1,11 +1,13 @@
 -- name: insert-comment<!
 -- Creates a comment
 insert into comments (
+  id,
   post_id,
   name,
   content
 ) values (
-  :post_id,
+  :id::uuid,
+  :post_id::uuid,
   :name,
   :content
 )
@@ -14,5 +16,5 @@ insert into comments (
 -- Gets a list of comments by post id
 select *
 from comments
-where post_id = :post_id
+where post_id = :post_id::uuid
 order by created_at

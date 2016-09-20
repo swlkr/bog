@@ -7,11 +7,8 @@
             [bog.controllers.users-controller :as users-controller]
             [bog.controllers.tokens-controller :as tokens-controller]
             [bog.controllers.status-controller :as status-controller]
-            [bog.controllers.posts-controller :refer [get-posts!
-                                                      get-post!
-                                                      create-post!
-                                                      update-post!]]
-            [bog.controllers.comments-controller :refer [create-comment! get-comments!]]
+            [bog.controllers.posts-controller :as posts-controller]
+            [bog.controllers.comments-controller :as comments-controller]
             [bog.controllers.drafts-controller :as drafts-controller]))
 
 ; protected api routes
@@ -26,19 +23,23 @@
         (PUT "/" {body :body} (drafts-controller/update! id body))
         (DELETE "/" [] (drafts-controller/delete! id))))
     (context "/posts" []
-      (POST "/" request (create-post! request))
-      (PUT "/:id" [id :<< as-int :as request] (update-post! request id)))))
+      (POST "/" {body :body} (posts-controller/create! body))
+      (context "/:id" [id]
+        (PUT "/" {body :body} (posts-controller/update! id body))
+        (DELETE "/" [] (posts-controller/delete! id))))))
 
 ; api routes
 (defroutes api-routes
   (context "/api" []
     (POST "/users" request (users-controller/create! request))
     (POST "/tokens" request (tokens-controller/create! request))
-    (GET "/status" request (status-controller/get request)))
-  (GET "/api/posts" req (get-posts! req))
-  (GET "/api/posts/:id" [id :<< as-int :as req] (get-post! id))
-  (POST "/api/comments" req (create-comment! req))
-  (GET "/api/posts/:id/comments" [id :<< as-int] (get-comments! id))
+    (GET "/status" request (status-controller/get request))
+    (context "/posts" []
+      (GET "/" [] (posts-controller/list!))
+      (context "/:id" [id]
+        (GET "/" [] (posts-controller/get! id))
+        (GET "/comments" [] (comments-controller/list! id))
+        (POST "/comments" {body :body} (comments-controller/create! id body)))))
   (wrap-routes protected-api-routes wrap-jwt-auth))
 
 ; client routes

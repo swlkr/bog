@@ -1,54 +1,27 @@
 (ns bog.logic.posts
-  (:require [bog.db :as db]
-            [bog.schemas :refer [PostRequest
-                                 parse-post-request
-                                 UpdatePostRequest
-                                 parse-update-post-request]]
-            [schema.core :as s]))
-
-(defn build-sql-params [params]
-  (let [{:keys [user title content type draft]} params]
-    {:user_id (:id user)
-     :title title
-     :content content
-     :type (name (or type ""))
-     :draft draft}))
-
-(defn format-date [date format-str]
-  (.format (java.text.SimpleDateFormat. format-str) date))
+  (:require [bog.utils :as utils]
+            [bog.errors :as errors]))
 
 (defn format-created-at [m]
   (let [{:keys [created_at]} m]
-    (assoc m :created_at (format-date created_at "MMMM dd yyyy"))))
+    (assoc m :created_at (utils/format-date created_at "MMMM dd yyyy"))))
 
-(defn create! [params]
-  (->> params
-       (parse-post-request)
-       (s/validate PostRequest)
-       (build-sql-params)
-       (db/insert-post<!)))
+(defn pre-create [m]
+  (let [ks [:id :user_id :title :content :type :sort_order]
+        post-types #{"post" "quote" "video" "slideshow"}]
+    (->> (select-keys m ks)
+         (utils/ensure! "A map is required" map?)
+         (utils/ensure! (errors/missing-keys ks) (partial utils/keys? ks))
+         (utils/ensure! "Post can only be quote, post, video, slideshow"
+                        (comp (partial contains? post-types) :type)))))
 
-(defn build-update-sql-params [params]
-  (let [{:keys [id]} params]
-    (-> params
-        (build-sql-params)
-        (merge {:id id}))))
-
-(defn update! [params]
-  (->> params
-       (parse-update-post-request)
-       (s/validate UpdatePostRequest)
-       (build-update-sql-params)
-       (db/update-post<!)
-       (format-created-at)))
-
-(defn get-list []
-  (->> (db/get-posts)
-       (map #(select-keys % [:id :title :content :created_at :draft]))
-       (map #(format-created-at %))))
-
-(defn get-post [id]
-  (->> (db/get-posts-by-id {:id id})
-       (map #(select-keys % [:id :title :content :created_at :draft :type]))
-       (map #(format-created-at %))
-       (first)))
+(defn pre-update [m]
+  (let [ks [:id]
+        opt-ks [:title :content :type :sort_order]
+        post-types #{"post" "quote" "video" "slideshow" nil}]
+    (->> (select-keys m (concat ks opt-ks))
+         (utils/ensure! "A map is required" map?)
+         (utils/ensure! (errors/missing-keys ks) (partial utils/keys? ks))
+         (merge {:title nil :content nil :type nil :sort_order nil})
+         (utils/ensure! "Post can only be quote, post, video, slideshow"
+                        (comp (partial contains? post-types) :type)))))

@@ -24,6 +24,5 @@
       (utils/ring-response)))
 
 (defn delete! [id]
-  (-> {:id id}
-      (db/delete-draft<!)
+  (-> (db/delete-draft<! {:id id})
       (utils/ring-response)))

@@ -4,12 +4,9 @@
             [ring.util.codec :as c]))
 
 (deftest create-valid
-  (let [input {:name "name" :content "<test/>" :post-id 1}
+  (let [input {:name "name" :content "<test/>" :post_id 1}
         expected {:name "name" :content (c/url-encode (:content input)) :post_id 1}]
     (is (= expected (create input)))))
-
-(deftest get-by-post-id-test
-  (is (= {:post_id 1} (get-by-post-id 1))))
 
 (deftest get-by-post-id-response-test
   (let [db-rows [{:id 1 :name "a" :content "b"}]
