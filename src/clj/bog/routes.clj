@@ -9,7 +9,17 @@
             [bog.controllers.status-controller :as status-controller]
             [bog.controllers.posts-controller :as posts-controller]
             [bog.controllers.comments-controller :as comments-controller]
-            [bog.controllers.drafts-controller :as drafts-controller]))
+            [bog.controllers.drafts-controller :as drafts-controller]
+
+(defmacro defresource [name & nested]
+  `(context ~(str "/" name) []
+    (POST "/" ~'{body :body} (~(symbol (str name "-controller/create!")) ~'body))
+    (GET "/" ~'{:keys [user]} (~(symbol (str name "-controller/list!")) ~'(:id user)))
+    (context "/:id" [~'id]
+      (GET "/" [] (~(symbol (str name "-controller/get!")) ~'id))
+      (PUT "/" ~'{body :body} (~(symbol (str name "-controller/update!")) ~'id ~'body))
+      (DELETE "/" [] (~(symbol (str name "-controller/delete!")) ~'id))
+      ~@nested)))
 
 ; protected api routes
 (defroutes protected-api-routes
