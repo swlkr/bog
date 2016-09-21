@@ -1,8 +1,9 @@
 (ns bog.logic.posts
   (:require [bog.utils :as utils]
-            [bog.errors :as errors]))
+            [bog.errors :as errors])
+  (:refer-clojure :exclude [update]))
 
-(defn pre-create [m]
+(defn create [m]
   (let [ks [:id :user_id :title :content :type :sort_order]
         post-types #{"post" "quote" "video" "slideshow"}]
     (->> (select-keys m ks)
@@ -12,7 +13,7 @@
                         (comp (partial contains? post-types) :type))
          (utils/ensure! (errors/missing-keys ks) (partial every? (comp not utils/blank?))))))
 
-(defn pre-update [m]
+(defn update [m]
   (let [ks [:id]
         opt-ks [:title :content :type :sort_order]
         post-types #{"post" "quote" "video" "slideshow" nil}]

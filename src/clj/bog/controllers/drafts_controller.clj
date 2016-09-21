@@ -4,7 +4,7 @@
             [bog.utils :as utils]))
 
 (defn create! [body]
-  (-> (drafts/pre-create body)
+  (-> (drafts/create body)
       (db/insert-draft<!)
       (utils/ring-response)))
 
@@ -19,7 +19,7 @@
 
 (defn update! [id body]
   (-> (merge {:id id} body)
-      (drafts/pre-update)
+      (drafts/update)
       (db/update-draft<!)
       (utils/ring-response)))
 

@@ -1,9 +1,10 @@
 (ns bog.logic.drafts
   (:require [bog.db :as db]
             [bog.utils :as utils]
-            [bog.errors :as errors]))
+            [bog.errors :as errors])
+  (:refer-clojure :exclude [update]))
 
-(defn pre-create [m]
+(defn create [m]
   (let [ks [:id :user_id :title :content :type :sort_order]
         draft-types #{"post" "quote" "video" "slideshow"}]
     (->> (select-keys m ks)
@@ -12,7 +13,7 @@
          (utils/ensure! "Draft can only be quote, post, video or slideshow"
                         (comp (partial contains? draft-types) :type)))))
 
-(defn pre-update [m]
+(defn update [m]
   (let [ks [:id]
         opt-ks [:title :content :type :sort_order]
         draft-types #{"post" "quote" "video" "slideshow" nil}]

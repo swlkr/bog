@@ -4,7 +4,7 @@
             [bog.db :as db]))
 
 (defn create! [body]
-  (-> (posts/pre-create body)
+  (-> (posts/create body)
       (db/insert-post<!)
       (utils/ring-response)))
 
@@ -19,7 +19,7 @@
 
 (defn update! [id body]
   (-> (merge {:id id} body)
-      (posts/pre-update)
+      (posts/update)
       (db/update-post<!)
       (utils/ring-response)))
 
