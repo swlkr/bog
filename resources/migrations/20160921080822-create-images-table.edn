@@ -1,0 +1,9 @@
+{:up [
+  "create table images (
+    id uuid primary key,
+    draft_id uuid not null,
+    filename text not null,
+    url text not null,
+    created_at timestamp without time zone default (now() at time zone 'utc')
+  )"]
+ :down ["DROP TABLE images;"]}

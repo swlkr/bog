@@ -10,6 +10,7 @@
             [bog.controllers.posts-controller :as posts-controller]
             [bog.controllers.comments-controller :as comments-controller]
             [bog.controllers.drafts-controller :as drafts-controller]
+            [bog.controllers.images-controller :as images-controller]))
 
 (defmacro defresource [name & nested]
   `(context ~(str "/" name) []
@@ -25,13 +26,8 @@
 (defroutes protected-api-routes
   (context "/api" []
     (GET "/protected-status" request (status-controller/get request))
-    (context "/drafts" []
-      (POST "/" {body :body} (drafts-controller/create! body))
-      (GET "/" {:keys [user]} (drafts-controller/list! (:id user)))
-      (context "/:id" [id]
-        (GET "/" [] (drafts-controller/get! id))
-        (PUT "/" {body :body} (drafts-controller/update! id body))
-        (DELETE "/" [] (drafts-controller/delete! id))))
+    (defresource "drafts"
+      (defresource "images"))
     (context "/posts" []
       (POST "/" {body :body} (posts-controller/create! body))
       (context "/:id" [id]
