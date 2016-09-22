@@ -1,0 +1,8 @@
+{:up [
+  "create table tags (
+    id uuid primary key,
+    draft_id uuid not null,
+    name text not null,
+    created_at timestamp without time zone default (now() at time zone 'utc')
+  )"]
+ :down ["DROP TABLE tags;"]}

@@ -10,12 +10,14 @@
             [bog.controllers.posts-controller :as posts-controller]
             [bog.controllers.comments-controller :as comments-controller]
             [bog.controllers.drafts-controller :as drafts-controller]
-            [bog.controllers.images-controller :as images-controller]))
+            [bog.controllers.images-controller :as images-controller]
+            [bog.controllers.tags-controller :as tags-controller]))
 
 ; protected api routes
 (defroutes protected-api-routes
   (context "/api" []
     (GET "/protected-status" request (status-controller/get request))
+
     (context "/drafts" []
       (POST "/" {body :body} (drafts-controller/create! body))
       (GET "/" {user :user} (drafts-controller/list! (:id user)))
@@ -23,13 +25,22 @@
         (GET "/" [] (drafts-controller/get! id))
         (PUT "/" {body :body} (drafts-controller/update! id body))
         (DELETE "/" [] (drafts-controller/delete! id))
+
         (context "/images" []
           (POST "/" {body :body} (images-controller/create! id body))
           (GET "/" [] (images-controller/list! id))
           (context "/:image-id" [image-id]
             (GET "/" [] (images-controller/get! image-id))
             (PUT "/" {body :body} (images-controller/update! image-id body))
-            (DELETE "/" [] (images-controller/delete! image-id))))))
+            (DELETE "/" [] (images-controller/delete! image-id))))
+
+        (context "/tags" []
+          (POST "/" {body :body} (tags-controller/create! id body))
+          (GET "/" [] (tags-controller/list! id))
+          (context "/:tag-id" [tag-id]
+            (GET "/" [] (tags-controller/get! tag-id))
+            (PUT "/" {body :body} (tags-controller/update! tag-id body))
+            (DELETE "/" [] (tags-controller/delete! tag-id))))))
 
     (context "/posts" []
       (POST "/" {body :body} (posts-controller/create! body))
@@ -43,6 +54,7 @@
     (POST "/users" {body :body} (users-controller/create! body))
     (POST "/tokens" {body :body} (tokens-controller/create! body))
     (GET "/status" request (status-controller/get request))
+
     (context "/posts" []
       (GET "/" [] (posts-controller/list!))
       (context "/:id" [id]
