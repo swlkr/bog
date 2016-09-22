@@ -12,3 +12,7 @@
 (defn list! [post_id]
   (-> (db/get-comments-by-post-id {:post_id post_id})
       (utils/ring-response)))
+
+(defn delete! [id]
+  (-> (db/delete-comment<! {:id id})
+      (utils/ring-response)))

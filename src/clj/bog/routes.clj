@@ -46,7 +46,8 @@
       (POST "/" {body :body} (posts-controller/create! body))
       (context "/:id" [id]
         (PUT "/" {body :body} (posts-controller/update! id body))
-        (DELETE "/" [] (posts-controller/delete! id))))))
+        (DELETE "/" [] (posts-controller/delete! id))
+        (DELETE "/comments/:comment-id" [comment-id] (comments-controller/delete! comment-id))))))
 
 ; api routes
 (defroutes api-routes

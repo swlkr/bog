@@ -18,3 +18,9 @@ select *
 from comments
 where post_id = :post_id::uuid
 order by created_at
+
+-- name: delete-comment<!
+-- Deletes a comment
+delete
+from comments
+where id = :id::uuid
