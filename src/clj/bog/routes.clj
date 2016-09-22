@@ -60,8 +60,11 @@
       (GET "/" [] (posts-controller/list!))
       (context "/:id" [id]
         (GET "/" [] (posts-controller/get! id))
-        (GET "/comments" [] (comments-controller/list! id))
-        (POST "/comments" {body :body} (comments-controller/create! id body)))))
+
+        (context "/comments" []
+          (GET "/" [] (comments-controller/list! id))
+          (POST "/" {body :body} (comments-controller/create! id body))))))
+
   (wrap-routes protected-api-routes wrap-jwt-auth))
 
 ; client routes
