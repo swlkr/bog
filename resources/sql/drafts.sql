@@ -6,14 +6,16 @@ insert into drafts (
   title,
   content,
   sort_order,
-  type
+  type,
+  published
 ) values (
   :id::uuid,
   :user_id::uuid,
   :title,
   :content,
   :sort_order,
-  :type
+  :type,
+  :published
 )
 
 -- name: update-draft<!
@@ -23,7 +25,8 @@ set
   title = coalesce(:title, title),
   content = coalesce(:content, content),
   type = coalesce(:type, type),
-  sort_order = coalesce(:sort_order, sort_order)
+  sort_order = coalesce(:sort_order, sort_order),
+  published = coalesce(:published, published)
 where
   id = :id::uuid
 
@@ -45,3 +48,16 @@ where id = :id::uuid
 delete
 from drafts
 where id = :id::uuid
+
+-- name: get-posts
+-- Gets a list of published drafts
+select *
+from drafts
+where published = true
+order by sort_order, created_at desc
+
+-- name: get-posts-by-id
+-- Gets a published draft by id
+select *
+from drafts
+where id = :id::uuid and published = true

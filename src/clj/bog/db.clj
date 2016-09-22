@@ -50,7 +50,6 @@
   {:connection (get-database-spec (env :database-url))})
 
 (defqueries "sql/users.sql" (get-connection))
-(defqueries "sql/posts.sql" (get-connection))
 (defqueries "sql/comments.sql" (get-connection))
 (defqueries "sql/drafts.sql" (get-connection))
 (defqueries "sql/images.sql" (get-connection))

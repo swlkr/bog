@@ -2,21 +2,21 @@
 -- Creates a comment
 insert into comments (
   id,
-  post_id,
+  draft_id,
   name,
   content
 ) values (
   :id::uuid,
-  :post_id::uuid,
+  :draft_id::uuid,
   :name,
   :content
 )
 
--- name: get-comments-by-post-id
--- Gets a list of comments by post id
+-- name: get-comments-by-draft-id
+-- Gets a list of comments by draft id
 select *
 from comments
-where post_id = :post_id::uuid
+where draft_id = :draft_id::uuid
 order by created_at
 
 -- name: delete-comment<!

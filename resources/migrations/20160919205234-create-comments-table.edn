@@ -1,7 +1,7 @@
 {:up [
   "create table comments (
     id uuid primary key,
-    post_id uuid not null,
+    draft_id uuid not null,
     name text not null,
     content text not null,
     created_at timestamp without time zone default (now() at time zone 'utc')

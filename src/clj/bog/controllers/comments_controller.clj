@@ -3,14 +3,14 @@
             [bog.db :as db]
             [bog.utils :as utils]))
 
-(defn create! [post_id body]
-  (-> (merge {:post_id post_id} body)
+(defn create! [draft_id body]
+  (-> (merge {:draft_id draft_id} body)
       (comments/create)
       (db/insert-comment<!)
       (utils/ring-response)))
 
-(defn list! [post_id]
-  (-> (db/get-comments-by-post-id {:post_id post_id})
+(defn list! [draft_id]
+  (-> (db/get-comments-by-draft-id {:draft_id draft_id})
       (utils/ring-response)))
 
 (defn delete! [id]

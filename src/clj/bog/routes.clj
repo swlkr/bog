@@ -17,6 +17,7 @@
 (defroutes protected-api-routes
   (context "/api" []
     (GET "/protected-status" request (status-controller/get request))
+    (DELETE "/comments/:id" [id] (comments-controller/delete! id))
 
     (context "/drafts" []
       (POST "/" {body :body} (drafts-controller/create! body))
@@ -40,14 +41,8 @@
           (context "/:tag-id" [tag-id]
             (GET "/" [] (tags-controller/get! tag-id))
             (PUT "/" {body :body} (tags-controller/update! tag-id body))
-            (DELETE "/" [] (tags-controller/delete! tag-id))))))
+            (DELETE "/" [] (tags-controller/delete! tag-id))))))))
 
-    (context "/posts" []
-      (POST "/" {body :body} (posts-controller/create! body))
-      (context "/:id" [id]
-        (PUT "/" {body :body} (posts-controller/update! id body))
-        (DELETE "/" [] (posts-controller/delete! id))
-        (DELETE "/comments/:comment-id" [comment-id] (comments-controller/delete! comment-id))))))
 
 ; api routes
 (defroutes api-routes
