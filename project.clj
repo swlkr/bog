@@ -21,7 +21,6 @@
                  [clojurewerkz/scrypt "1.2.0"]
                  [clj-jwt "0.1.1"]
                  [markdown-clj "0.9.89"]
-                 [prismatic/schema "1.1.2"]
                  [bidi "1.20.3"]
                  [kibu/pushy "0.3.2"]
                  [cljs-http "0.1.41"]
