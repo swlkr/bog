@@ -19,7 +19,8 @@
                                           :content "b"
                                           :type "a"
                                           :sort_order 0
-                                          :id "931CA995-204C-4A21-A750-F7883899F631"})
+                                          :id "931CA995-204C-4A21-A750-F7883899F631"
+                                          :published false})
             expected {:status 500
                       :body (json/write-str {:message "Draft can only be quote, post, video or slideshow"})
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
@@ -33,9 +34,10 @@
                                    :body {:title nil
                                           :content "b"
                                           :type "post"
-                                          :sort_order 0})
+                                          :sort_order 0
+                                          :published false})
             expected {:status 500
-                      :body (json/write-str {:message "Missing parameters. Expected: id, user_id, title, content, type, sort_order"})
+                      :body (json/write-str {:message "Missing parameters. Expected: id, user_id, title, content, type, sort_order, published"})
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
         (is
           (= expected
@@ -48,7 +50,8 @@
                                           :content "content"
                                           :type "post"
                                           :sort_order 0
-                                          :id "931CA995-204C-4A21-A750-F7883899F631"})
+                                          :id "931CA995-204C-4A21-A750-F7883899F631"
+                                          :published false})
 
             expected {:status 200
                       :body (json/write-str {:id "931CA995-204C-4A21-A750-F7883899F631"
@@ -56,7 +59,8 @@
                                              :title "title"
                                              :content "content"
                                              :type "post"
-                                             :sort_order 0})
+                                             :sort_order 0
+                                             :published false})
                       :headers {"Content-Type" "application/json; charset=utf-8"}}]
         (is
           (= expected
