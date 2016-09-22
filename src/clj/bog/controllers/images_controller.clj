@@ -3,8 +3,9 @@
             [bog.db :as db]
             [bog.utils :as utils]))
 
-(defn create! [body]
-  (-> (images/create body)
+(defn create! [draft_id body]
+  (-> (merge {:draft_id draft_id} body)
+      (images/create)
       (db/insert-image<!)
       (utils/ring-response)))
 

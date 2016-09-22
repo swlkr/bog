@@ -1,6 +1,6 @@
 -- name: insert-image<!
 -- Creates an image
-insert into drafts (
+insert into images (
   id,
   draft_id,
   filename,
@@ -14,7 +14,7 @@ insert into drafts (
 
 -- name: update-image<!
 -- Updates an image
-update imagse
+update images
 set
   filename = coalesce(:filename, filename),
   url = coalesce(:url, url)

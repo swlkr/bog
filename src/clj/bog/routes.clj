@@ -12,22 +12,25 @@
             [bog.controllers.drafts-controller :as drafts-controller]
             [bog.controllers.images-controller :as images-controller]))
 
-(defmacro defresource [name & nested]
-  `(context ~(str "/" name) []
-    (POST "/" ~'{body :body} (~(symbol (str name "-controller/create!")) ~'body))
-    (GET "/" ~'{:keys [user]} (~(symbol (str name "-controller/list!")) ~'(:id user)))
-    (context "/:id" [~'id]
-      (GET "/" [] (~(symbol (str name "-controller/get!")) ~'id))
-      (PUT "/" ~'{body :body} (~(symbol (str name "-controller/update!")) ~'id ~'body))
-      (DELETE "/" [] (~(symbol (str name "-controller/delete!")) ~'id))
-      ~@nested)))
-
 ; protected api routes
 (defroutes protected-api-routes
   (context "/api" []
     (GET "/protected-status" request (status-controller/get request))
-    (defresource "drafts"
-      (defresource "images"))
+    (context "/drafts" []
+      (POST "/" {body :body} (drafts-controller/create! body))
+      (GET "/" {user :user} (drafts-controller/list! (:id user)))
+      (context "/:id" [id]
+        (GET "/" [] (drafts-controller/get! id))
+        (PUT "/" {body :body} (drafts-controller/update! id body))
+        (DELETE "/" [] (drafts-controller/delete! id))
+        (context "/images" []
+          (POST "/" {body :body} (images-controller/create! id body))
+          (GET "/" [] (images-controller/list! id))
+          (context "/:image-id" [image-id]
+            (GET "/" [] (images-controller/get! image-id))
+            (PUT "/" {body :body} (images-controller/update! image-id body))
+            (DELETE "/" [] (images-controller/delete! image-id))))))
+
     (context "/posts" []
       (POST "/" {body :body} (posts-controller/create! body))
       (context "/:id" [id]
