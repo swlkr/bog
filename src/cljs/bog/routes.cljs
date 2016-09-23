@@ -3,7 +3,8 @@
             [pushy.core :as pushy]
             [bog.app-state :refer [app-state]]
             [bog.local-storage :as storage]
-            [clojure.string :as str]))
+            [clojure.string :as str])
+  (:refer-clojure :exclude [uuid]))
 
 (def routes ["/" {"" :posts
                   "login" :login

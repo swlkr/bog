@@ -29,8 +29,6 @@
         c (views view)
         access-token (storage/get-item "access-token")]
     (swap! app-state assoc :access-token access-token)
-    [:div {:class "max-height"}
-      [navbar]
-      [c]]))
+    [c]))
 
 (reagent/render [app] (js/document.getElementById "app"))

@@ -6,31 +6,43 @@
              [bog.actions :as actions]
              [bog.utils :refer [classes]]))
 
+(defn notification [{:keys [message is-danger is-info]}]
+  (when message
+    (let [class (classes {"notification" true
+                          "is-danger" is-danger})]
+      [:div {:class class}
+        message])))
+
 (defn login-view []
-  (let [error (:error @app-state)
-        alert-class (classes {"alert alert-danger" true
-                              "hidden" (nil? error)})]
-    [:div {:class "container-fluid max-height"}
-      [:div {:class "logo-container text-center"}
-        [:i {:class "logo fa fa-5x fa-leaf"}]]
-      [:form {:class "m-t-3"}
-        [:div {:class alert-class}
-          [:strong "Oh snap! "]
-          error]
-        [:div {:class "form-group"}
-          [input :type "text"
-                 :placeholder "example@your-email.com"
-                 :class "form-control input-lg"
-                 :path [:login :email]
-                 :state app-state]]
-        [:div {:class "form-group"}
-          [input :type "password"
-                 :placeholder "Your password"
-                 :class "form-control input-lg"
-                 :path [:login :password]
-                 :state app-state]]
-        [:button {:class "btn btn-primary btn-block btn-lg"
-                  :on-click actions/login} "Login"]]
-      [:div {:class "text-center m-t-2"}
-        [:a {:href (routes/url-for :forgot-password)}
-          "Forgot your password?"]]]))
+  (let [error (:error @app-state)]
+    [:div
+      [:section {:class "hero is-light is-fullheight"}
+        [:div {:class "hero-body"}
+          [:div {:class "container"}
+            [:div {:class "columns is-mobile"}
+              [:div {:class "column is-half is-offset-one-quarter"}
+                [:div {:class "logo-container has-text-centered"}
+                  [:i {:class "fa fa-5x fa-paper-plane"}]
+                  [:h1 {:class "title m-t-3"} "Adventure Walker"]]
+                [:form {:class "m-t-3"}
+                  [notification {:message error
+                                 :is-danger true}]
+                  [input :type "text"
+                         :placeholder "your@email.com"
+                         :class "input"
+                         :path [:login :email]
+                         :state app-state]
+                  [input :type "password"
+                         :placeholder "password"
+                         :class "input"
+                         :path [:login :password]
+                         :state app-state]]
+                [:div {:class "level is-mobile m-t-1"}
+                  [:div {:class "level-left"}
+                    [:div {:class "level-item"}
+                      [:a {:class "button is-primary"
+                           :on-click actions/login} "Login"]]]
+                  [:div
+                    [:div {:class "level-item"}
+                      [:a {:href (routes/url-for :forgot-password)}
+                        "Forgot your password?"]]]]]]]]]]))
