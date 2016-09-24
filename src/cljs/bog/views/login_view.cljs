@@ -20,9 +20,15 @@
         [:div {:class "hero-body"}
           [:div {:class "container"}
             [:div {:class "columns is-mobile"}
-              [:div {:class "column is-half is-offset-one-quarter"}
+              [:div {:class "column
+                            is-10-mobile
+                            is-offset-1-mobile
+                            is-4-deskto
+                            is-offset-4-desktop
+                            is-4-tablet
+                            is-offset-4-tablet"}
                 [:div {:class "logo-container has-text-centered"}
-                  [:i {:class "fa fa-5x fa-paper-plane"}]
+                  [:i {:class "fa fa-2x fa-paper-plane"}]
                   [:h1 {:class "title m-t-3"} "Adventure Walker"]]
                 [:form {:class "m-t-3"}
                   [notification {:message error
