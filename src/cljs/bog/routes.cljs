@@ -1,40 +1,22 @@
 (ns bog.routes
+  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [bidi.bidi :as bidi]
             [pushy.core :as pushy]
-            [bog.app-state :refer [app-state]]
-            [bog.local-storage :as storage]
-            [clojure.string :as str])
+            [clojure.string :as str]
+            [cljs.core.async :refer [>!]])
   (:refer-clojure :exclude [uuid]))
-
-(def routes ["/" {"" :posts
-                  "login" :login
-                  "posts" {"" :new-post
-                           ["/" :id] :post}
-                  "drafts" {"" :drafts
-                            ["/" :id "/edit"] :edit-draft}}])
 
 (def url-for (partial bidi/path-for routes))
 
-(defn has-token? []
-  (let [token (storage/get-item "access-token")]
-    (and (not (nil? token))
-         (not (str/blank? token)))))
-
-(def auth-routes [:new-post])
-
-(defn set-page! [match]
+(defn set-page! [channels match]
   (let [{:keys [handler route-params]} match]
-    (if (and
-          (not (has-token?))
-          (= handler :new-post))
-      (aset js/location "href" "/login")
-      (swap! app-state assoc :view handler :route-params route-params))))
+    (go
+      (>! (:route-ch channels) {:handler handler :route-params route-params}))))
 
-(def history
-  (pushy/pushy set-page! (partial bidi/match-route routes)))
+(defn push! [path])
+  ;(pushy/set-token! history path))
 
-(defn push! [path]
-  (pushy/set-token! history path))
-
-(defn app-routes []
-  (pushy/start! history))
+(defn init-routing! [app]
+  (let [{:keys [channels routes]} app
+        history (pushy/pushy (partial set-page! channels) (partial bidi/match-route routes))]
+    (pushy/start! history)))

@@ -43,7 +43,6 @@
             (PUT "/" {body :body} (tags-controller/update! tag-id body))
             (DELETE "/" [] (tags-controller/delete! tag-id))))))))
 
-
 ; api routes
 (defroutes api-routes
   (context "/api" []
