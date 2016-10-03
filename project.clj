@@ -25,7 +25,8 @@
                  [kibu/pushy "0.3.2"]
                  [cljs-http "0.1.41"]
                  [ring/ring-mock "0.3.0"]
-                 [proto-repl "0.3.1"]]
+                 [proto-repl "0.3.1"]
+                 [quiescent "0.3.3-SNAPSHOT"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
@@ -60,6 +61,7 @@
                            :asset-path "/js/compiled/out"
                            :output-to "resources/public/js/compiled/bog.js"
                            :output-dir "resources/public/js/compiled/out"
+                           :optimizations :none
                            :source-map-timestamp true}}
 
                {:id "test"
