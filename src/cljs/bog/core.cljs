@@ -78,7 +78,6 @@
           (let [val (<! (get channels ch))
                 _ (.log js/console (str "on channel [" ch "], recieved value [" val "]"))
                 new-state (swap! state update-fn val)]
-            (println (str @state))
             (render/request-render app)))))))
 
 (defn store
