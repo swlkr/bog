@@ -6,6 +6,7 @@
             [cljs.core.async :refer [>!]])
   (:refer-clojure :exclude [uuid]))
 
+(def routes [])
 (def url-for (partial bidi/path-for routes))
 
 (defn set-page! [channels match]
