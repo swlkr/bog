@@ -48,6 +48,7 @@
   {:view :home
    :message ""
    :info ""
+   :new-draft-content ""
    :email ""
    :password ""})
 
