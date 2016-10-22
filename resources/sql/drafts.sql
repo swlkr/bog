@@ -36,6 +36,8 @@ select *
 from drafts
 where user_id = :user_id::uuid
 order by sort_order asc, created_at desc
+limit 10
+offset 0
 
 -- name: get-drafts-by-id
 -- Gets a list of drafts by id
@@ -55,6 +57,8 @@ select *
 from drafts
 where published = true
 order by sort_order, created_at desc
+limit 10
+offset 0
 
 -- name: get-posts-by-id
 -- Gets a published draft by id

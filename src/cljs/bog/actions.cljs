@@ -2,9 +2,11 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [bog.app-state :refer [app-state]]
             [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]
+            [cljs.core.async :refer [<! >! chan]]
             [bog.local-storage :as storage]
-            [bog.routes :as routes]))
+            [bog.routes :as routes]
+            [bidi.bidi :as bidi]
+            [bog.app :as app]))
 
 (defn toggle-navbar []
   (let [{:keys [navbar-collapsed]} @app-state]
@@ -43,59 +45,3 @@
               (swap! app-state update-in [:edit-draft] {:title "" :content "" :type "post"})
               (swap! app-state assoc :view :drafts))
             (swap! app-state assoc :error (:message body)))))))
-
-(defn input-ch [state {:keys [key val]}]
-  (assoc state key val))
-
-(defn login-ch [state val]
-  (let [{:keys [email password login-res-ch]} val]
-    (go
-      (let [res (<! (http/post "/api/tokens" {:json-params {:email email :password password}}))]
-        (>! login-res-ch res)))
-    (assoc state :info "Logging in...")))
-
-(defn login-res-ch [state response]
-  (let [{:keys [status body]} response]
-    (if (= status 200)
-      (do
-        (. js/window.history (pushState "" "" "posts/new"))
-        (assoc state :access-token (:access-token body)
-                     :email ""
-                     :password ""
-                     :message ""
-                     :info ""
-                     :view :new-post))
-      (assoc state :message (:message body)
-                   :info ""))))
-
-(defonce auth-routes #{:new-post})
-
-(defn get-view [routes token]
-  (->> routes
-       (keys)
-       (filter #(= token (peek %)))
-       (first)
-       (first)))
-
-(defn token->view [routes token]
-  (let [view (get-view routes token)]
-    (if (nil? view)
-      (->> routes
-           (keys)
-           (filter #(= (count %) 1))
-           (first)
-           (first))
-      view)))
-
-(defn route-ch
-  "Given an application state, set the current view based on the URL token"
-  [state val]
-  (let [{:keys [token routes]} val
-        view (token->view routes token)]
-    (if (and
-          (nil? (:access-token state))
-          (contains? auth-routes view))
-      (do
-        (. js/window.history (pushState "" "" "/login"))
-        (assoc state :view :login))
-      (assoc state :view view))))

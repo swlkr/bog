@@ -26,7 +26,9 @@
                  [cljs-http "0.1.41"]
                  [ring/ring-mock "0.3.0"]
                  [proto-repl "0.3.1"]
-                 [quiescent "0.3.3-SNAPSHOT"]]
+                 [quiescent "0.3.3-SNAPSHOT"]
+                 [hiccup "1.0.5"]
+                 [snap "1.0.0"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]

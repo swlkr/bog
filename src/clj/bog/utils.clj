@@ -22,8 +22,8 @@
     arg
     (throw+ err)))
 
-(defn ring-response [body]
-  {:status 200
+(defn ring-response [body & status]
+  {:status (or status 200)
    :body body})
 
 (defn keys? [ks m]

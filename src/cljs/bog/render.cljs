@@ -1,22 +1,27 @@
 (ns bog.render
-  (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [cljs.core.async :refer [>!]]
-            [quiescent.core :as q]
-            [quiescent.dom :as d]))
+  (:require [quiescent.core :as q]
+            [quiescent.dom :as d]
+            [bog.routes :as routes]
+            [bog.views.login-view :refer [LoginView]]
+            [bog.views.home-view :refer [HomeView]]
+            [bog.views.draft-list-view :refer [DraftListView]]
+            [bog.views.new-draft-view :refer [NewDraftView]]))
 
-(defn view->component [routes view]
-  (->> routes
-       (keys)
-       (filter #(= view (first %)))
-       (first)
-       (get routes)))
+(defn view->component [view]
+  (condp = view
+    :login LoginView
+    :draft-list DraftListView
+    :new-draft NewDraftView
+    :home HomeView
+    HomeView))
+    ; not found
 
 (q/defcomponent App
   "The root of the application"
-  [state channels routes]
+  [state]
   (let [{:keys [view]} state
-        current-view (view->component routes view)]
-    (current-view state channels)))
+        component (view->component view)]
+    (component state)))
 
 ;; Here we use an atom to tell us if we already have a render queued
 ;; up; if so, requesting another render is a no-op
@@ -27,6 +32,6 @@
     (when (compare-and-set! render-pending? false true)
       (.requestAnimationFrame js/window
                               (fn []
-                                (q/render (App @(:state app) (:channels app) (:routes app))
+                                (q/render (App @(:state app))
                                           (.getElementById js/document "app")))
                               (reset! render-pending? false)))))

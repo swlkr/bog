@@ -3,7 +3,7 @@
             [compojure.core :refer [GET POST PUT DELETE wrap-routes defroutes context]]
             [compojure.route :refer [resources not-found]]
             [compojure.coercions :refer [as-int]]
-            [bog.middleware :refer [wrap-jwt-auth]]
+            [bog.middleware :as middleware]
             [bog.controllers.users-controller :as users-controller]
             [bog.controllers.tokens-controller :as tokens-controller]
             [bog.controllers.status-controller :as status-controller]
@@ -59,7 +59,9 @@
           (GET "/" [] (comments-controller/list! id))
           (POST "/" {body :body} (comments-controller/create! id body))))))
 
-  (wrap-routes protected-api-routes wrap-jwt-auth))
+  (-> protected-api-routes
+      (wrap-routes middleware/wrap-jwt)
+      (wrap-routes middleware/wrap-auth)))
 
 ; client routes
 (defn client-response []
@@ -68,12 +70,13 @@
    :body (io/input-stream (io/resource "public/index.html"))})
 
 (defroutes routes
-  api-routes
+  (wrap-routes api-routes middleware/wrap-jwt)
   (GET "/" _ (client-response))
   (GET "/login" _ (client-response))
   (GET "/posts/new" _ (client-response))
   (GET "/posts/:id" _ (client-response))
   (GET "/drafts" _ (client-response))
+  (GET "/drafts/new" _ (client-response))
   (GET "/drafts/:id/edit" _ (client-response))
   (resources "/")
   (not-found (slurp (io/resource "public/404.html"))))
