@@ -8,9 +8,10 @@
    :access-token ""
    :info ""
    :drafts []
+   :submitting false
+   :new-draft {:title ""
+               :content ""}
    :posts []
-   :new-draft/content ""
-   :new-draft/title ""
    :user/email ""
    :user/password ""
    :route-params {}})

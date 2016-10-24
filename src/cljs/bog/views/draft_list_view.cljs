@@ -5,6 +5,7 @@
             [cljs.core.async :refer [>!]]
             [bog.components.hero :refer [Hero]]
             [bog.components.link :refer [Link]]
+            [bog.components.card :refer [Card]]
             [bog.app :refer [dispatch! add-action app]]
             [bog.api :as api]
             [bog.utils :as utils]))
@@ -31,23 +32,27 @@
 (add-action :on-delete-draft-success on-delete-draft-success)
 (add-action :on-delete-draft-err on-delete-draft-err)
 
-(q/defcomponent DraftRow
+(q/defcomponent DraftCard
   :keyfn :id
-  [{:keys [id title] :as draft}]
-  (d/tr {}
-    (d/td {}
-      (Link {:href (str "/drafts/" id)} title))
-    (d/td {:style {:width "90%"}})
-    (d/td {}
-      (Link {:href (str "/drafts/" id)} "Edit"))
-    (d/td {}
-      (Link {:href (str "/drafts/" id)} "Preview"))
-    (d/td {}
-      (Link {:onClick (fn [e]
-                       (let [c (js/confirm "Are you sure?")]
-                        (when (= c true)
-                          #(dispatch! :on-delete-draft-click draft))))}
-          "Delete"))))
+  [{:keys [id title content days_ago] :as draft}]
+  (d/div {:className "column is-one-quarter"}
+    (Card {:title title :img "http://placehold.it/300x225"}
+      (d/div {}
+        (d/div {:style {:marginBottom "20px"}}
+          (d/p {}
+            content)
+          (d/div {}
+            (str days_ago " days ago")))
+        (d/div {}
+          (Link {:href (str "/drafts/" id)} "Preview")
+          (Link {:style {:marginLeft "5px"}
+                 :href (str "/drafts/" id "/edit")} "Edit")
+          (Link {:style {:marginLeft "5px"}
+                 :onClick (fn [e]
+                           (let [c (js/confirm "Are you sure?")]
+                            (when (= c true)
+                              #(dispatch! :on-delete-draft-click draft))))}
+            "Delete"))))))
 
 (defn get-drafts [state _]
   (go
@@ -79,6 +84,5 @@
         (d/div {:className "columns"}
           (d/div {:className "column"}
             (Link {:href "/drafts/new"} "New Draft")
-            (d/table {:className "table m-t-3"}
-              (d/tbody {}
-                (map DraftRow drafts)))))))))
+            (d/div {:className "columns m-t-3"}
+              (map DraftCard drafts))))))))

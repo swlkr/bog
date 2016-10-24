@@ -9,17 +9,37 @@
             [bog.app :refer [dispatch! add-action]]))
 
 (defn on-new-draft-title-change [state val]
-  (assoc state :new-draft/title val))
+  (assoc-in state [:draft :title] val))
 
 (defn on-new-draft-content-change [state val]
-  (assoc state :new-draft/content val))
+  (assoc-in state [:draft :title] val))
+
+(defn on-save-draft-click [state _]
+  (go
+    (let [{:keys [title content]} (:new-draft state)
+          req {:title title
+               :content content
+               :id (str (random-uuid))
+               :sort_order 0
+               :type :post
+               :published false}
+          {:keys [status body]} (<! (api/send))]
+      (if (= status 200)
+        (dispatch! :on-save-draft-click-res body)
+        (dispatch! :on-error body)))))
+
+(defn on-save-draft-click-res [state draft]
+  (assoc state :submitting false))
 
 (add-action :on-new-draft-content-change on-new-draft-content-change)
 (add-action :on-new-draft-title-change on-new-draft-title-change)
+(add-action :on-save-draft-click on-save-draft-click)
+(add-action :on-save-draft-click-res on-save-draft-click-res)
 
 (q/defcomponent NewDraftView
   [state]
-  (let [{:keys [:new-draft/title :new-draft/content info]} state
+  (let [{:keys [info new-draft]} state
+        {:keys [title content]} new-draft
         html-content (md->html content)]
     (d/div {}
       (Hero {:title "New Draft"

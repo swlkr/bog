@@ -32,7 +32,9 @@ where
 
 -- name: get-drafts
 -- Gets a list of drafts for given user
-select *
+select
+  drafts.*,
+  (CURRENT_DATE - created_at::date) days_ago
 from drafts
 where user_id = :user_id::uuid
 order by sort_order asc, created_at desc
@@ -41,7 +43,9 @@ offset 0
 
 -- name: get-drafts-by-id
 -- Gets a list of drafts by id
-select *
+select
+  drafts.*,
+  (CURRENT_DATE - created_at::date) days_ago
 from drafts
 where id = :id::uuid
 
@@ -53,7 +57,9 @@ where id = :id::uuid
 
 -- name: get-posts
 -- Gets a list of published drafts
-select *
+select
+  drafts.*,
+  (CURRENT_DATE - created_at::date) days_ago
 from drafts
 where published = true
 order by sort_order, created_at desc
@@ -62,6 +68,8 @@ offset 0
 
 -- name: get-posts-by-id
 -- Gets a published draft by id
-select *
+select
+  drafts.*,
+  (CURRENT_DATE - created_at::date) days_ago
 from drafts
 where id = :id::uuid and published = true
