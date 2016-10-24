@@ -2,7 +2,13 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<! >! chan]]
-            [bog.app :refer [dispatch!]]))
+            [bog.app :refer [dispatch! add-action]]))
+
+(defn on-error [state body]
+  (let [{:keys [message]} body]
+    (assoc state :error message)))
+
+(add-action :on-error on-error)
 
 (defn add-default-headers [state headers]
   (let [{:keys [access-token]} state]
