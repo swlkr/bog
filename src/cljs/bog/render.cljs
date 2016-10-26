@@ -5,13 +5,15 @@
             [bog.views.login-view :refer [LoginView]]
             [bog.views.home-view :refer [HomeView]]
             [bog.views.draft-list-view :refer [DraftListView]]
-            [bog.views.new-draft-view :refer [NewDraftView]]))
+            [bog.views.new-draft-view :refer [NewDraftView]]
+            [bog.views.preview-draft-view :refer [PreviewDraftView]]))
 
 (defn view->component [view]
   (condp = view
     :login LoginView
     :draft-list DraftListView
     :new-draft NewDraftView
+    :preview-draft PreviewDraftView
     :home HomeView
     HomeView))
     ; not found

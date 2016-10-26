@@ -1,4 +1,5 @@
 (ns bog.views.new-draft-view
+  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [quiescent.core :as q]
             [quiescent.dom :as d]
             [markdown.core :refer [md->html]]
@@ -6,7 +7,8 @@
             [bog.components.input :refer [Input]]
             [bog.components.hero :refer [Hero]]
             [bog.components.notification :refer [Notification]]
-            [bog.app :refer [dispatch! add-action]]))
+            [bog.app :refer [dispatch! add-action]]
+            [bog.api :as api]))
 
 (defn on-new-draft-title-change [state val]
   (assoc-in state [:draft :title] val))
@@ -23,7 +25,7 @@
                :sort_order 0
                :type :post
                :published false}
-          {:keys [status body]} (<! (api/send))]
+          {:keys [status body]} (<! (api/send state req))]
       (if (= status 200)
         (dispatch! :on-save-draft-click-res body)
         (dispatch! :on-error body)))))

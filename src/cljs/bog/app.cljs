@@ -8,6 +8,8 @@
    :access-token ""
    :info ""
    :drafts []
+   :draft {:title ""
+           :content ""}
    :submitting false
    :new-draft {:title ""
                :content ""}

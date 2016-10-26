@@ -11,10 +11,10 @@
                       "login" :login
                       "drafts" {"" :draft-list
                                 "/new" :new-draft
-                                ["/" :id "/edit"] :edit-draft}
-                      "posts/" {"new" :new-post}}])
+                                ["/" :id "/edit"] :edit-draft
+                                ["/" :id] :preview-draft}}])
 
-(def auth-routes #{:new-draft :draft-list})
+(def auth-routes #{:new-draft :draft-list :preview-draft :edit-draft})
 
 (defn on-url-change [state token]
   (let [{:keys [handler route-params]} (bidi/match-route app-routes token)]

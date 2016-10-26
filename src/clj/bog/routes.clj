@@ -77,6 +77,7 @@
   (GET "/posts/:id" _ (client-response))
   (GET "/drafts" _ (client-response))
   (GET "/drafts/new" _ (client-response))
+  (GET "/drafts/:id" _ (client-response))
   (GET "/drafts/:id/edit" _ (client-response))
   (resources "/")
   (not-found (slurp (io/resource "public/404.html"))))

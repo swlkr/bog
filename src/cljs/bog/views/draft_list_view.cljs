@@ -19,18 +19,13 @@
       (dispatch! :loading false)
       (if (= status 200)
         (dispatch! :on-delete-draft-success body)
-        (dispatch! :on-delete-draft-err body)))))
+        (dispatch! :on-error body)))))
 
-(defn on-delete-draft-success [state body]
-  (let [new-drafts (utils/remove-from-coll-by-id (:drafts state) body)]
-    (assoc state :drafts new-drafts)))
-
-(defn on-delete-draft-err [state body]
-  (assoc state :message (:message body)))
+(defn on-delete-draft-res [state {:keys [id]}]
+  (update-in state [:drafts id] dissoc))
 
 (add-action :on-delete-draft-click on-delete-draft-click)
-(add-action :on-delete-draft-success on-delete-draft-success)
-(add-action :on-delete-draft-err on-delete-draft-err)
+(add-action :on-delete-draft-res on-delete-draft-res)
 
 (q/defcomponent DraftCard
   :keyfn :id
@@ -50,8 +45,8 @@
           (Link {:style {:marginLeft "5px"}
                  :onClick (fn [e]
                            (let [c (js/confirm "Are you sure?")]
-                            (when (= c true)
-                              #(dispatch! :on-delete-draft-click draft))))}
+                            (when c
+                              (dispatch! :on-delete-draft-click draft))))}
             "Delete"))))))
 
 (defn get-drafts [state _]
