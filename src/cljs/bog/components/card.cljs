@@ -4,7 +4,7 @@
             [bog.utils :as utils]))
 
 (q/defcomponent Card
-  :keyfn :title
+  :keyfn :id
   [{:keys [img title fullwidth]} & children]
   (let [class (utils/classes {"is-fullwidth" fullwidth
                               "card" true})]

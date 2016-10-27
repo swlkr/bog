@@ -465,3 +465,12 @@ a.no-link:hover {
 .post-view {
   background: #f7f7f7;
 }
+
+.text-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  height: 20px;
+  min-height: 20px;
+  white-space: nowrap;
+}

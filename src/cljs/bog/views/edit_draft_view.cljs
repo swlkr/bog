@@ -1,4 +1,4 @@
-(ns bog.views.new-draft-view
+(ns bog.views.edit-draft-view
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [quiescent.core :as q]
             [quiescent.dom :as d]
@@ -11,38 +11,36 @@
             [bog.api :as api]
             [bog.actions.drafts :as drafts]))
 
-(q/defcomponent NewDraftView
+(q/defcomponent EditDraftView
+  :on-mount #(dispatch! :drafts/get nil)
   [state]
-  (let [{:keys [info new-draft]} state
-        {:keys [title content]} new-draft
+  (let [{:keys [submitting draft]} state
+        {:keys [title content]} draft
         html-content (md->html content)]
     (d/div {}
-      (Hero {:title "New Draft"
-             :subtitle "Create a new draft here!"})
+      (Hero {:title "Edit Draft"
+             :subtitle "Edit an existing draft here!"})
       (d/div {:className "container m-t-3"}
         (d/div {:className "columns"}
           (d/div {:className "column"}
-            (Notification {:message info})
             (Input {:label "Title"
-                    :placholder "New draft title goes here"
                     :value (or title "")
                     :onChange (fn [e]
                                 (let [val (-> e .-target .-value)]
-                                  (dispatch! :drafts/change [[:new-draft :title] val])))})
+                                  (dispatch! :drafts/change [[:draft :title] val])))})
 
             (Textarea {:className "textarea"
-                       :placeholder "New draft content goes here"
                        :style {:height "200px"}
                        :value (or content "")
                        :label "Content"
                        :onChange (fn [e]
                                    (let [val (-> e .-target .-value)]
-                                    (dispatch! :drafts/change [[:new-draft :content] val])))})
+                                    (dispatch! :drafts/change [[:draft :content val]])))})
 
             (d/p {:className "control"}
-              (d/button {:className "button is-primary"
+              (d/button {:className (str "button is-primary " (when submitting "is-loading"))
                          :style {:marginRight "10px"}
-                         :onClick #(dispatch! :drafts/create nil)}
+                         :onClick #(dispatch! :drafts/update nil)}
                 "Save"))
 
             (d/div {:className "box"}

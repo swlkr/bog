@@ -6,7 +6,7 @@
 
 (defn on-error [state body]
   (let [{:keys [message]} body]
-    (assoc state :error message :loading false)))
+    (assoc state :error message :loading false :submitting false)))
 
 (add-action :on-error on-error)
 

@@ -5,29 +5,11 @@
             [cljs.core.async :refer [<!]]
             [bog.app :as app]
             [bog.api :as api]
-            [bog.components.hero :refer [Hero]]))
-
-(defn get-draft [state _]
-  (.log js/console "get-draft")
-  (go
-    (let [{:keys [route-params]} state
-          id (:id route-params)
-          req {:url (str "/api/drafts/" id) :method :get}
-          {:keys [status body]} (<! (api/send state req))]
-      (if (= status 200)
-        (app/dispatch! :get-draft-res body)
-        (app/dispatch! :on-error body))
-      (.log js/console (str id))))
-  (assoc state :loading true))
-
-(defn get-draft-res [state draft]
-  (assoc state :draft draft :loading false))
-
-(app/add-action :get-draft get-draft)
-(app/add-action :get-draft-res get-draft-res)
+            [bog.components.hero :refer [Hero]]
+            [bog.actions.drafts :as drafts]))
 
 (q/defcomponent PreviewDraftView
-  :on-mount #(app/dispatch! :get-draft nil)
+  :on-mount #(app/dispatch! :drafts/get nil)
   [state]
   (let [{:keys [title content days_ago]} (:draft state)]
     (d/div {}

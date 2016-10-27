@@ -24,7 +24,9 @@
       (do
         (. js/window.history (pushState "" "" "/login"))
         (assoc state :view :login))
-      (assoc state :view handler :route-params route-params))))
+      (do
+        (. js/window.history (pushState "" "" token))
+        (assoc state :view handler :route-params route-params)))))
 
 (add-action :on-url-change on-url-change)
 

@@ -11,8 +11,6 @@
         :onClick (fn [e]
                   (.preventDefault e)
                   (if (nil? href)
-                    (onClick)
-                    (do
-                      (dispatch! :on-url-change href)
-                      (. js/window.history (pushState "" "" href)))))}
+                    (onClick e)
+                    (dispatch! :on-url-change href)))}
     children))
