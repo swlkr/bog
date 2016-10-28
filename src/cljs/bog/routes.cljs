@@ -29,6 +29,7 @@
         (assoc state :view handler :route-params route-params)))))
 
 (add-action :on-url-change on-url-change)
+(add-action :urls/change on-url-change)
 
 (def routes [])
 

@@ -41,7 +41,13 @@
               (d/button {:className (str "button is-primary " (when submitting "is-loading"))
                          :style {:marginRight "10px"}
                          :onClick #(dispatch! :drafts/update nil)}
-                "Save"))
+                "Save")
+
+              (d/button {:className (str "button is-default " (when submitting "is-loading"))
+                         :onClick #(dispatch! :urls/change "/drafts")}
+                "Cancel"))
+
+
 
             (d/div {:className "box"}
               (d/div {:className "content"}

@@ -13,7 +13,7 @@
 
 (q/defcomponent NewDraftView
   [state]
-  (let [{:keys [info new-draft]} state
+  (let [{:keys [info new-draft submitting]} state
         {:keys [title content]} new-draft
         html-content (md->html content)]
     (d/div {}
@@ -43,7 +43,11 @@
               (d/button {:className "button is-primary"
                          :style {:marginRight "10px"}
                          :onClick #(dispatch! :drafts/create nil)}
-                "Save"))
+                "Save")
+
+              (d/button {:className (str "button is-default " (when submitting "is-loading"))
+                         :onClick #(dispatch! :urls/change "/drafts")}
+                "Cancel"))
 
             (d/div {:className "box"}
               (d/div {:className "content"}
