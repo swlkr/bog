@@ -14,7 +14,7 @@
 (q/defcomponent DraftCard
   :keyfn :id
   [{:keys [id title content days_ago] :as draft}]
-  (d/div {:key id :className "column is-one-third"}
+  (d/div {:key id :className "column is-one-quarter"}
     (Card {:id id :title title :img "http://placehold.it/300x225"}
       (d/div {}
         (d/div {:style {:marginBottom "20px"}}
