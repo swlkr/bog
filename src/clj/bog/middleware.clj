@@ -16,9 +16,8 @@
     (let [authorization (get-in request [:headers "authorization"])
           secret (env :secret)
           user (tokens/decode! authorization secret)
-          req (assoc request :user user)
-          r (assoc-in req [:body :user_id] (:id user))]
-      (handler r))))
+          req (assoc request :user user)]
+      (handler req))))
 
 (defn wrap-auth [handler]
   (fn [request]

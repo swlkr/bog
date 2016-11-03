@@ -20,7 +20,7 @@
     (DELETE "/comments/:id" [id] (comments-controller/delete! id))
 
     (context "/drafts" []
-      (POST "/" {body :body} (drafts-controller/create! body))
+      (POST "/" {:keys [body user]} (drafts-controller/create! body user))
       (GET "/" {user :user} (drafts-controller/list! (:id user)))
       (context "/:id" [id]
         (GET "/" [] (drafts-controller/get! id))

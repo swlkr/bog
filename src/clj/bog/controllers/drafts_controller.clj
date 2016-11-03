@@ -3,8 +3,8 @@
             [bog.db :as db]
             [bog.utils :as utils]))
 
-(defn create! [body]
-  (-> (drafts/create body)
+(defn create! [body user]
+  (-> (drafts/create (merge body {:user_id (:id user)}))
       (db/insert-draft<!)
       (utils/ring-response)))
 
