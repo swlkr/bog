@@ -20,6 +20,7 @@
   (let [{:keys [url method body headers]} params
         all-headers (add-default-headers state headers)]
     (condp = method
+      :upload (http/post url {:multipart-params body :headers all-headers})
       :post   (http/post url {:json-params body :headers all-headers})
       :put    (http/put url {:json-params body :headers all-headers})
       :get    (http/get url {:headers all-headers})

@@ -1,7 +1,8 @@
 (ns bog.logic.images
   (:require [bog.db :as db]
             [bog.utils :as utils]
-            [bog.errors :as errors])
+            [bog.errors :as errors]
+            [clojure.string :as string])
   (:refer-clojure :exclude [update]))
 
 (defn create [m]

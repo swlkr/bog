@@ -11,13 +11,15 @@
             [bog.controllers.comments-controller :as comments-controller]
             [bog.controllers.drafts-controller :as drafts-controller]
             [bog.controllers.images-controller :as images-controller]
-            [bog.controllers.tags-controller :as tags-controller]))
+            [bog.controllers.tags-controller :as tags-controller]
+            [bog.controllers.files-controller :as files-controller]))
 
 ; protected api routes
 (defroutes protected-api-routes
   (context "/api" []
     (GET "/protected-status" request (status-controller/get request))
     (DELETE "/comments/:id" [id] (comments-controller/delete! id))
+    (POST "/files" {params :params} (files-controller/create! params))
 
     (context "/drafts" []
       (POST "/" {:keys [body user]} (drafts-controller/create! body user))
