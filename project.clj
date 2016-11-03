@@ -27,8 +27,7 @@
                  [ring/ring-mock "0.3.0"]
                  [proto-repl "0.3.1"]
                  [quiescent "0.3.3-SNAPSHOT"]
-                 [hiccup "1.0.5"]
-                 [snap "1.0.0"]]
+                 [clj-aws-s3 "0.3.10" :exclusions [joda-time]]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]
